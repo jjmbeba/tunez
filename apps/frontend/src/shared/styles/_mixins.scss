@@ -1,0 +1,14 @@
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+
+@mixin respond-up($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+@mixin container {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+}
