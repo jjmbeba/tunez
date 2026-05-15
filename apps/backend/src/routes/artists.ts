@@ -3,7 +3,6 @@ import { Hono } from "hono";
 import { TtlCache } from "../lib/cache.js";
 import * as lastfm from "../lib/lastfm.js";
 import type { LastfmArtistResponse } from "../lib/lastfm.types.js";
-import * as musicbrainz from "../lib/musicbrainz.js";
 
 const router = new Hono();
 const cache = new TtlCache(24 * 60 * 60 * 1000); // 24 hour TTL
