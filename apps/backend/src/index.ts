@@ -1,14 +1,31 @@
-import { Hono } from 'hono'
+import "dotenv/config";
+import { serve } from "@hono/node-server";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { artistsRouter } from "./routes/artists.js";
+import { lyricsRouter } from "./routes/lyrics.js";
+import { stationsRouter } from "./routes/stations.js";
 
-const app = new Hono()
+const app = new Hono();
 
-const welcomeStrings = [
-  'Hello Hono!',
-  'To learn more about Hono on Vercel, visit https://vercel.com/docs/frameworks/backend/hono'
-]
+app.use("*", cors());
 
-app.get('/', (c) => {
-  return c.text(welcomeStrings.join('\n\n'))
-})
+app.get("/api/health", (c) => {
+  return c.json({
+    success: true,
+    data: {
+      status: "ok",
+    },
+  });
+});
 
-export default app
+app.route("/api/stations", stationsRouter);
+app.route("/api/artists", artistsRouter);
+app.route("/api/lyrics", lyricsRouter);
+
+const port = Number(process.env.PORT ?? 3000);
+console.log(`Backend listening on http://localhost:${port}`);
+
+serve({ fetch: app.fetch, port });
+
+export default app;

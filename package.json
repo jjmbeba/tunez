@@ -4,10 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"pnpm --filter vue-frontend dev\" \"pnpm --filter hono-backend dev\"",
+    "build": "pnpm -r build",
+    "type-check": "pnpm -r type-check",
+    "format": "pnpm -r format"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.14.0"
+  "packageManager": "pnpm@10.14.0",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }

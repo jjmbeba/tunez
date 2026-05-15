@@ -1,11 +1,30 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="app-shell">
+    <header class="app-header">Tunez</header>
+    <main class="app-main">
+      <RouterView />
+    </main>
+    <footer class="player-placeholder">Player (Phase 2)</footer>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+.app-header {
+  padding: 1rem;
+  font-weight: 700;
+}
+.app-main {
+  padding: 1rem;
+}
+.player-placeholder {
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+</style>
