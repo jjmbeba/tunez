@@ -37,8 +37,17 @@ async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(url.toString(), {
     headers: {
       "User-Agent": USER_AGENT,
+      Accept: "application/json",
     },
   });
+
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    throw new Error(
+      `MusicBrainz returned ${contentType} instead of JSON — possible bot challenge. ` +
+        `Status: ${response.status}`,
+    );
+  }
 
   if (!response.ok) {
     throw new Error(

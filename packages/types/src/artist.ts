@@ -2,9 +2,10 @@ export interface Artist {
   name: string;
   mbid: string;
   bio: string;
+  url: string;
   image: string;
   listeners: number;
-  playcount: number;
+  playCount: number;
   similar: string[];
   tags: string[];
 }
@@ -20,4 +21,5 @@ export interface Album {
   title: string;
   type: "Album" | "Single" | "EP" | "Compilation" | string;
   releaseYear: number | null;
+  image: string;
 }

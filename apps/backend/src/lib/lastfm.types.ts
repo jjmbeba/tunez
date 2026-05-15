@@ -49,6 +49,26 @@ export interface LastfmSimilarArtists {
 export interface LastfmArtistResponse {
   artist: LastfmArtist;
 }
+
+export interface LastfmAlbum {
+  name: string;
+  mbid: string;
+  url: string;
+  image: LastfmImage[];
+  artist: {
+    name: string;
+    mbid: string;
+    url: string;
+  };
+  playcount: string;
+}
+
+export interface LastfmTopAlbumsResponse {
+  topalbums: {
+    album: LastfmAlbum[];
+  };
+}
+
 export interface LastfmErrorResponse {
   error: number;
   message: string;

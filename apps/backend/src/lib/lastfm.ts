@@ -1,6 +1,7 @@
 import type {
   LastfmArtistResponse,
   LastfmSimilarArtists,
+  LastfmTopAlbumsResponse,
 } from "./lastfm.types.js";
 
 const BASE_URL = "https://ws.audioscrobbler.com/2.0";
@@ -62,6 +63,18 @@ export async function getSimilarArtists(
 ): Promise<LastfmSimilarArtists> {
   return callApi<LastfmSimilarArtists>({
     method: "artist.getSimilar",
+    artist,
+    limit: limit.toString(),
+    autocorrect: "1",
+  });
+}
+
+export async function getTopAlbums(
+  artist: string,
+  limit = 50,
+): Promise<LastfmTopAlbumsResponse> {
+  return callApi<LastfmTopAlbumsResponse>({
+    method: "artist.getTopAlbums",
     artist,
     limit: limit.toString(),
     autocorrect: "1",
