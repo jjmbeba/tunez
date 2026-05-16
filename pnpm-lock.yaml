@@ -39,6 +39,9 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@tunes/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@6.0.3)(vue@3.5.34(typescript@6.0.3))
