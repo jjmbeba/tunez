@@ -8,7 +8,13 @@ import { stationsRouter } from "./routes/stations.js";
 
 const app = new Hono();
 
-app.use("*", cors());
+app.use(
+  "*",
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  }),
+);
 
 app.get("/api/health", (c) => {
   return c.json({
