@@ -5,7 +5,8 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/radio",
+      name: "home",
+      component: () => import("@/pages/home/home-page.vue"),
     },
     {
       path: "/radio",
@@ -16,6 +17,11 @@ const router = createRouter({
       path: "/artists",
       name: "artists",
       component: () => import("@/pages/artists/artists-page.vue"),
+    },
+    {
+      path: "/artists/:name/discography",
+      name: "artist-discography",
+      component: () => import("@/pages/artists/artist-discography-page.vue"),
     },
     {
       path: "/artists/:name",
@@ -29,8 +35,13 @@ const router = createRouter({
     },
     {
       path: "/favorites",
-      name: "favories",
+      name: "favorites",
       component: () => import("@/pages/favorites/favorites-page.vue"),
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () => import("@/pages/profile/profile-page.vue"),
     },
   ],
 });

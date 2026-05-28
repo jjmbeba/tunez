@@ -1,0 +1,36 @@
+.shell-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-md);
+  color: var(--minimal-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    color 0.2s,
+    background 0.2s;
+
+  &:hover {
+    color: var(--minimal-ink);
+    background: var(--minimal-bg-selected);
+  }
+
+  &.router-link-active {
+    color: var(--minimal-ink);
+    background: var(--minimal-bg-selected);
+  }
+}
+
+.shell-wordmark {
+  font-family: var(--font-minimal);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--minimal-ink);
+  text-decoration: none;
+  letter-spacing: -0.015em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

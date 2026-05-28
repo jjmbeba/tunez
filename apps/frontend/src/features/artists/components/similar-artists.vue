@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronRight, Radio, Users } from "lucide-vue-next";
+import { Radio, Users } from "lucide-vue-next";
 import { useArtistSimilar } from "@/composables/use-artist";
 import { useRouter } from "vue-router";
 
@@ -26,21 +26,27 @@ function goToArtist(artistName: string) {
     </div>
 
     <div v-if="isSimilarLoading" class="state">Loading...</div>
-    <div v-else class="similar-list">
-      <button v-for="s in similar" :key="s.name" class="similar-item" @click="goToArtist(s.name)">
+    <div v-else class="similar-carousel">
+      <button
+        v-for="s in similar"
+        :key="s.name"
+        type="button"
+        class="similar-card"
+        @click="goToArtist(s.name)"
+      >
         <div class="similar-avatar">
           <img
             v-if="s.image"
             :src="s.image"
             :alt="s.name"
+            loading="lazy"
             @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
           />
           <div v-else class="similar-avatar-placeholder">
-            <Radio stroke-width="1" :size="12" />
+            <Radio stroke-width="1" :size="14" />
           </div>
         </div>
         <span class="similar-name">{{ s.name }}</span>
-        <ChevronRight stroke-width="1" :size="12" class="similar-chevron" />
       </button>
     </div>
   </section>
@@ -49,37 +55,73 @@ function goToArtist(artistName: string) {
 <style scoped lang="scss">
 @use "../styles/section-shared";
 
-.similar-list {
+.similar-carousel {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 120px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-inline-end: 8px;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: var(--radius-full);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
+  @media (hover: none) {
+    scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+    }
+  }
 }
 
-.similar-item {
+.similar-card {
+  flex: 0 0 auto;
+  width: 88px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 8px 10px;
-  margin: 0 -10px;
+  gap: 8px;
+  padding: 6px;
   background: none;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   color: var(--color-text);
   font-family: inherit;
-  font-size: 13px;
-  text-align: left;
+  scroll-snap-align: start;
   transition: background 0.15s ease;
-}
 
-.similar-item:hover {
-  background: var(--color-surface);
+  &:hover {
+    background: var(--color-surface);
+  }
 }
 
 .similar-avatar {
-  width: 36px;
-  height: 36px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
@@ -104,16 +146,17 @@ function goToArtist(artistName: string) {
 }
 
 .similar-name {
-  flex: 1;
+  width: 100%;
+  min-height: 2.6em;
+  max-height: 2.6em;
+  font-size: 11px;
   font-weight: 500;
-  min-width: 0;
+  text-align: center;
+  line-height: 1.3;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.similar-chevron {
-  color: var(--color-muted);
-  flex-shrink: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 </style>

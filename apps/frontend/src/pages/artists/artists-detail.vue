@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useArtist } from "@/composables/use-artist";
 import ArtistAlbums from "@/features/artists/components/artist-albums.vue";
+import ArtistBio from "@/features/artists/components/artist-bio.vue";
+import ArtistProfileShell from "@/features/artists/components/artist-profile-shell.vue";
 import SimilarArtists from "@/features/artists/components/similar-artists.vue";
-import { ArrowLeft, Headphones, Music, Play } from "lucide-vue-next";
+import { ArrowLeft, Headphones, Music } from "lucide-vue-next";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
@@ -16,56 +18,53 @@ function goBack() {
 </script>
 
 <template>
-  <section class="minimal">
-    <button class="back" @click="goBack">
-      <ArrowLeft stroke-width="1" :size="14" />
-      <span>Artists</span>
-    </button>
+  <ArtistProfileShell>
+    <section class="minimal">
+      <button class="back" type="button" @click="goBack">
+        <ArrowLeft stroke-width="1" :size="14" />
+        <span>Artists</span>
+      </button>
 
-    <div v-if="isArtistLoading" class="state">Loading artist...</div>
-    <div v-else-if="error" class="state error">{{ error }}</div>
+      <div v-if="isArtistLoading" class="state">Loading artist...</div>
+      <div v-else-if="error" class="state error">{{ error }}</div>
 
-    <template v-else-if="artist">
-      <header class="hero">
-        <div class="hero-media">
-          <img
-            v-if="artist.image"
-            :src="artist.image"
-            :alt="artist.name"
-            class="hero-image"
-            @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
-          />
-          <div v-else class="hero-image-placeholder">
-            <Music stroke-width="1" :size="32" />
-          </div>
-        </div>
-
-        <div class="hero-info">
-          <h1 class="hero-name">{{ artist.name }}</h1>
-
-          <div class="hero-stats">
-            <span class="stat">
-              <Headphones stroke-width="1" :size="12" />
-              <span>{{ artist.listeners.toLocaleString() }} listeners</span>
-            </span>
-            <span class="stat">
-              <Play stroke-width="1" :size="12" />
-              <span>{{ artist.playCount.toLocaleString() }} plays</span>
-            </span>
+      <template v-else-if="artist">
+        <header class="hero">
+          <div class="hero-media">
+            <img
+              v-if="artist.image"
+              :src="artist.image"
+              :alt="artist.name"
+              class="hero-image"
+              @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
+            />
+            <div v-else class="hero-image-placeholder">
+              <Music stroke-width="1" :size="32" />
+            </div>
           </div>
 
-          <div v-if="artist.tags?.length" class="hero-tags">
-            <span v-for="tag in artist.tags" :key="tag" class="tag">{{ tag }}</span>
+          <div class="hero-info">
+            <h1 class="hero-name">{{ artist.name }}</h1>
+
+            <div class="hero-stats">
+              <span class="stat">
+                <Headphones stroke-width="1" :size="12" />
+                <span>{{ artist.listeners.toLocaleString() }} listeners</span>
+              </span>
+            </div>
+
+            <div v-if="artist.tags?.length" class="hero-tags">
+              <span v-for="tag in artist.tags" :key="tag" class="tag">{{ tag }}</span>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <p v-if="artist.bio" class="bio">{{ artist.bio }}</p>
-
-      <ArtistAlbums :name="name" />
-      <SimilarArtists :name="name" />
-    </template>
-  </section>
+        <ArtistBio v-if="artist.bio" :bio="artist.bio" />
+        <ArtistAlbums :name="name" />
+        <SimilarArtists :name="name" />
+      </template>
+    </section>
+  </ArtistProfileShell>
 </template>
 
 <style scoped lang="scss">
@@ -185,14 +184,6 @@ function goBack() {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.01em;
-}
-
-.bio {
-  color: var(--minimal-muted);
-  font-size: 14px;
-  line-height: 1.65;
-  margin: 0 0 40px;
-  max-width: 640px;
 }
 
 @keyframes reveal-up {
