@@ -17,7 +17,7 @@ function search() {
 <template>
   <section class="artist-search">
     <h1>Artists</h1>
-    <form class="search-form" @submit.preven="search">
+    <form class="search-form" @submit.prevent="search">
       <input
         v-model="query"
         type="text"
@@ -30,7 +30,7 @@ function search() {
   </section>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .artist-search {
   max-width: 36rem;
   margin: 0 auto;
@@ -38,8 +38,11 @@ function search() {
 }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--minimal-ink);
   margin-bottom: var(--space-6);
+  letter-spacing: -0.015em;
 }
 
 .search-form {
@@ -49,27 +52,45 @@ h1 {
 
 .search-input {
   flex: 1;
-  padding: var(--space-3) var(--space-4);
+  padding: 10px 14px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-muted);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: 1rem;
+  border: 1px solid var(--minimal-border);
+  background: #ffffff;
+  color: var(--minimal-ink);
+  font-family: var(--font-minimal);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.search-input::placeholder {
+  color: var(--minimal-subtle);
+}
+
+.search-input:focus {
+  border-color: var(--minimal-muted);
 }
 
 .search-btn {
-  padding: var(--space-3) var(--space-6);
+  padding: 10px 20px;
   border-radius: var(--radius-md);
-  border: none;
-  background: var(--color-accent);
-  color: #fff;
-  font-weight: 600;
+  border: 1px solid var(--minimal-border);
+  background: var(--minimal-ink);
+  color: #ffffff;
+  font-family: var(--font-minimal);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.search-btn:hover {
+  opacity: 0.85;
 }
 
 .hint {
   margin-top: var(--space-6);
-  color: var(--color-muted);
-  font-size: 0.875rem;
+  color: var(--minimal-subtle);
+  font-size: 12px;
 }
 </style>
