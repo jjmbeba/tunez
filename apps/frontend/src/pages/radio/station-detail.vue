@@ -37,7 +37,9 @@ function goBack() {
         </div>
       </div>
 
-      <div v-else-if="error" class="state error">{{ error }}</div>
+      <div v-else-if="error" class="state error">
+        Failed to load station details. Please try again.
+      </div>
 
       <template v-else-if="station">
         <header class="hero">
