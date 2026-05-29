@@ -1,8 +1,9 @@
-import type { Album, ApiResponse, Artist, ArtistBrief } from "@tunes/types";
+import type { Artist } from "@tunes/types";
 import { Hono } from "hono";
 import { TtlCache } from "../lib/cache.js";
 import * as lastfm from "../lib/lastfm.js";
 import type { LastfmArtistResponse } from "../lib/lastfm.types.js";
+import { fail, ok } from "../lib/response.js";
 
 const router = new Hono();
 const cache = new TtlCache(24 * 60 * 60 * 1000); // 24 hour TTL
@@ -31,103 +32,91 @@ function toArtist(raw: LastfmArtistResponse["artist"]): Artist {
   };
 }
 
+router.get("/search", async (c) => {
+  try {
+    const query = c.req.query("q")?.trim();
+    const rawLimit = Number(c.req.query("limit"));
+    const limit = Number.isInteger(rawLimit) && rawLimit > 0 ? rawLimit : 10;
+
+    if (!query || query.length < 2) {
+      return c.json(fail("Query must be at least 2 characters"), 400);
+    }
+
+    const cacheKey = `artist-search:${query.toLowerCase()}:limit=${limit}`;
+    const results = await cache.fetch(cacheKey, () =>
+      lastfm.searchArtists(query, limit).then((raw) =>
+        raw.results.artistmatches.artist.map((a) => ({
+          name: a.name,
+          mbid: a.mbid,
+          url: a.url,
+          image: pickImage(a.image),
+          listeners: Number(a.listeners ?? 0),
+        })),
+      ),
+    );
+
+    return c.json(ok(results));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return c.json(fail(message), 502);
+  }
+});
+
 router.get("/:name", async (c) => {
   try {
     const name = c.req.param("name");
-    const cacheKey = `artist:${name.toLowerCase()}`;
-    const cached = cache.get<Artist>(cacheKey);
+    const artist = await cache.fetch(`artist:${name.toLowerCase()}`, () =>
+      lastfm.getArtistInfo(name).then((raw) => toArtist(raw.artist)),
+    );
 
-    if (cached) {
-      return c.json({
-        success: true,
-        data: cached,
-      } satisfies ApiResponse<Artist>);
-    }
-
-    const raw = await lastfm.getArtistInfo(name);
-    const artist = toArtist(raw.artist);
-    cache.set(cacheKey, artist);
-
-    return c.json({
-      success: true,
-      data: artist,
-    } satisfies ApiResponse<Artist>);
+    return c.json(ok(artist));
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     const status = message.includes("not found") ? 404 : 502;
 
-    return c.json(
-      { success: false, error: message } satisfies ApiResponse<never>,
-      status,
-    );
+    return c.json(fail(message), status);
   }
 });
 
 router.get("/:name/similar", async (c) => {
   try {
     const name = c.req.param("name");
-    const cacheKey = `artist:${name.toLowerCase()}:similar`;
-    const cached = cache.get<ArtistBrief[]>(cacheKey);
+    const similar = await cache.fetch(`artist:${name.toLowerCase()}:similar`, () =>
+      lastfm.getSimilarArtists(name).then((raw) =>
+        raw.similarartists.artist.map((a) => ({
+          name: a.name,
+          image: pickImage(a.image),
+          url: a.url,
+        })),
+      ),
+    );
 
-    if (cached) {
-      return c.json({ success: true, data: cached } satisfies ApiResponse<
-        ArtistBrief[]
-      >);
-    }
-
-    const raw = await lastfm.getSimilarArtists(name);
-    const similar: ArtistBrief[] = raw.similarartists.artist.map((a) => ({
-      name: a.name,
-      image: pickImage(a.image),
-      url: a.url,
-    }));
-    cache.set(cacheKey, similar);
-
-    return c.json({ success: true, data: similar } satisfies ApiResponse<
-      ArtistBrief[]
-    >);
+    return c.json(ok(similar));
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    return c.json(
-      { success: false, error: message } satisfies ApiResponse<never>,
-      502,
-    );
+    return c.json(fail(message), 502);
   }
 });
 
 router.get("/:name/albums", async (c) => {
   try {
     const name = c.req.param("name");
-    const cacheKey = `artist:${name.toLowerCase()}:albums`;
-    const cached = cache.get<Album[]>(cacheKey);
+    const albums = await cache.fetch(`artist:${name.toLowerCase()}:albums`, () =>
+      lastfm.getTopAlbums(name).then((raw) =>
+        raw.topalbums.album.map((a) => ({
+          id: a.mbid,
+          title: a.name,
+          type: "Album" as const,
+          releaseYear: null,
+          image: pickImage(a.image),
+        })),
+      ),
+    );
 
-    if (cached) {
-      return c.json({ success: true, data: cached } satisfies ApiResponse<
-        Album[]
-      >);
-    }
-
-    const raw = await lastfm.getTopAlbums(name);
-
-    const albums: Album[] = raw.topalbums.album.map((a) => ({
-      id: a.mbid,
-      title: a.name,
-      type: "Album" as const,
-      releaseYear: null,
-      image: pickImage(a.image),
-    }));
-
-    cache.set(cacheKey, albums);
-
-    return c.json({ success: true, data: albums } satisfies ApiResponse<
-      Album[]
-    >);
+    return c.json(ok(albums));
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    return c.json(
-      { success: false, error: message } satisfies ApiResponse<never>,
-      502,
-    );
+    return c.json(fail(message), 502);
   }
 });
 

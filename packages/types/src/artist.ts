@@ -16,6 +16,14 @@ export interface ArtistBrief {
   url: string;
 }
 
+export interface ArtistSearchResult {
+  name: string;
+  mbid: string;
+  url: string;
+  image: string;
+  listeners: number;
+}
+
 export interface Album {
   id: string;
   title: string;

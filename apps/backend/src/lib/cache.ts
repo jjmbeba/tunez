@@ -5,6 +5,7 @@ interface CacheEntry<T> {
 
 export class TtlCache {
   private store = new Map<string, CacheEntry<unknown>>();
+  private inflight = new Map<string, Promise<unknown>>();
 
   constructor(private defaultTtlMs: number = 60_000) {}
 
@@ -32,7 +33,29 @@ export class TtlCache {
     return this.store.has(key);
   }
 
+  async fetch<T>(key: string, fetcher: () => Promise<T>, ttlMs?: number): Promise<T> {
+    const cached = this.get<T>(key);
+
+    if (cached !== undefined) return cached;
+
+    const pending = this.inflight.get(key) as Promise<T> | undefined;
+    if (pending) return pending;
+
+    const request = fetcher()
+      .then((data) => {
+        this.set(key, data, ttlMs);
+        return data;
+      })
+      .finally(() => {
+        this.inflight.delete(key);
+      });
+
+    this.inflight.set(key, request);
+    return request;
+  }
+
   clear(): void {
     this.store.clear();
+    this.inflight.clear();
   }
 }

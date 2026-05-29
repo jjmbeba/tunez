@@ -1,7 +1,7 @@
 <template>
   <section class="page">
-    <h1>Genres</h1>
-    <p class="hint">Browse by genre will appear here.</p>
+    <h1>Profile</h1>
+    <p class="hint">Settings and account options will appear here.</p>
   </section>
 </template>
 

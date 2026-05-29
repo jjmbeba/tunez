@@ -1,6 +1,6 @@
 import type { ApiResponse } from "@tunes/types";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000").replace(/\/+$/, "");
 
 class ApiError extends Error {
   constructor(message: string) {
@@ -10,11 +10,17 @@ class ApiError extends Error {
 }
 
 export async function get<T>(path: string): Promise<T> {
-  const response = await fetch(`${BASE_URL}/api/${path}`, {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const url = new URL(`api${normalizedPath}`, `${BASE_URL}/`).href;
+  const response = await fetch(url, {
     headers: {
       Accept: "application/json",
     },
   });
+
+  if (!response.ok) {
+    throw new ApiError(`HTTP error ${response.status}: ${response.statusText}`);
+  }
 
   const body: ApiResponse<T> = await response.json();
 

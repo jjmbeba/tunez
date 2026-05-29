@@ -15,10 +15,12 @@
     "format": "oxfmt src/"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^5.100.14",
+    "@tunes/types": "workspace:*",
+    "lucide-vue-next": "^1.0.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.32",
-    "vue-router": "^5.0.4",
-    "@tunes/types": "workspace:*"
+    "vue-router": "^5.0.4"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",

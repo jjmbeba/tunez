@@ -1,0 +1,105 @@
+<script setup lang="ts">
+import { Users } from "lucide-vue-next";
+import { useArtistSimilar } from "@/composables/use-artist";
+import { useRouter } from "vue-router";
+import ArtistImage from "@/features/artists/components/artist-image.vue";
+import { toRef } from "vue";
+
+const router = useRouter();
+
+const props = defineProps<{
+  name: string;
+}>();
+
+const artistName = toRef(props, "name");
+const { data: similar, isLoading: isSimilarLoading } = useArtistSimilar(artistName);
+
+function goToArtist(artistName: string) {
+  router.push(`/artists/${encodeURIComponent(artistName)}`);
+}
+</script>
+
+<template>
+  <section v-if="isSimilarLoading || similar?.length" class="section">
+    <div class="section-header">
+      <h2 class="section-title">
+        <Users stroke-width="1" :size="16" />
+        <span>Fans also like</span>
+      </h2>
+    </div>
+
+    <div v-if="isSimilarLoading" class="state">Loading...</div>
+    <div v-else class="similar-carousel">
+      <button
+        v-for="s in similar"
+        :key="s.name"
+        type="button"
+        class="similar-card"
+        @click="goToArtist(s.name)"
+      >
+        <div class="similar-avatar">
+          <ArtistImage :src="s.image" :alt="s.name" icon="Radio" :size="14" />
+        </div>
+        <span class="similar-name">{{ s.name }}</span>
+      </button>
+    </div>
+  </section>
+</template>
+
+<style scoped lang="scss">
+@use "../styles/section-shared";
+@use "../styles/carousel";
+
+.similar-carousel {
+  @include carousel.carousel;
+  gap: 16px;
+  min-height: 120px;
+}
+
+.similar-card {
+  flex: 0 0 auto;
+  width: 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--color-text);
+  font-family: inherit;
+  scroll-snap-align: start;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--color-surface);
+  }
+}
+
+.similar-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--minimal-border);
+}
+
+.similar-name {
+  width: 100%;
+  min-height: 2.6em;
+  max-height: 2.6em;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+</style>

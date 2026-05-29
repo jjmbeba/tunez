@@ -1,0 +1,39 @@
+@mixin carousel {
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-inline-end: 8px;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: var(--radius-full);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
+  @media (hover: none) {
+    scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+    }
+  }
+}
