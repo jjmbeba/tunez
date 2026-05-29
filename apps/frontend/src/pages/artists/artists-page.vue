@@ -2,7 +2,7 @@
 import { useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useArtistSearch } from "@/composables/use-artist";
-import ArtistImage from "@/features/artists/components/artist-image.vue";
+import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
 
 const router = useRouter();
 const { query, debouncedQuery, showResults, data: results, isLoading, isError, error } =
@@ -57,7 +57,7 @@ function goToArtist(name: string) {
         @click="goToArtist(a.name)"
       >
         <div class="result-avatar">
-          <ArtistImage :src="a.image" :alt="a.name" icon="Radio" :size="18" />
+            <FallbackArtwork :src="a.image" :alt="a.name" icon="Radio" :size="18" />
         </div>
         <span class="result-name">{{ a.name }}</span>
       </button>

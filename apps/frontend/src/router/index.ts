@@ -29,6 +29,11 @@ const router = createRouter({
       component: () => import("@/pages/artists/artists-detail.vue"),
     },
     {
+      path: "/radio/:id",
+      name: "station-detail",
+      component: () => import("@/pages/radio/station-detail.vue"),
+    },
+    {
       path: "/genres",
       name: "genres",
       component: () => import("@/pages/genres/genres-page.vue"),

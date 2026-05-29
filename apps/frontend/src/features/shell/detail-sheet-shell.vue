@@ -1,28 +1,33 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 
+const props = defineProps<{
+  fallbackRoute: string;
+}>();
+
 const router = useRouter();
 
 function dismiss() {
   if (window.history.length > 1) {
     router.back();
-  } else {
-    router.push("/artists");
+    return;
   }
+
+  router.push(props.fallbackRoute);
 }
 </script>
 
 <template>
-  <div class="profile-shell">
-    <div class="profile-shell__backdrop" aria-hidden="true" @click="dismiss" />
-    <div class="profile-shell__panel">
+  <div class="detail-shell">
+    <div class="detail-shell__backdrop" aria-hidden="true" @click="dismiss" />
+    <div class="detail-shell__panel">
       <slot />
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.profile-shell {
+.detail-shell {
   @media (max-width: 767px) {
     position: fixed;
     inset: 0;
@@ -36,7 +41,7 @@ function dismiss() {
   }
 }
 
-.profile-shell__backdrop {
+.detail-shell__backdrop {
   @media (max-width: 767px) {
     position: absolute;
     inset: 0;
@@ -48,7 +53,7 @@ function dismiss() {
   }
 }
 
-.profile-shell__panel {
+.detail-shell__panel {
   @media (max-width: 767px) {
     position: relative;
     flex: 1;

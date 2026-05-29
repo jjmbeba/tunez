@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { ChevronRight, Disc3, Play } from "lucide-vue-next";
-import { useArtistAlbums } from "@/composables/use-artist";
-import { computed, toRef } from "vue";
-import ArtistImage from "@/features/artists/components/artist-image.vue";
-import { RouterLink } from "vue-router";
+import { useArtistAlbums } from '@/composables/use-artist'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
+import { ChevronRight, Disc3 } from 'lucide-vue-next'
+import { computed, toRef } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const props = defineProps<{
-  name: string;
-}>();
+  name: string
+}>()
 
-const MAX_ALBUMS = 12;
+const MAX_ALBUMS = 12
 
-const artistName = toRef(props, "name");
-const { data: albums, isLoading, error } = useArtistAlbums(artistName);
+const artistName = toRef(props, 'name')
+const { data: albums, isLoading, error } = useArtistAlbums(artistName)
 
 const previewAlbums = computed(() => {
-  const list = albums.value;
+  const list = albums.value
 
-  return list ? list.slice(0, MAX_ALBUMS) : [];
-});
+  return list ? list.slice(0, MAX_ALBUMS) : []
+})
 
-const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
+const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS)
 </script>
 
 <template>
@@ -45,10 +45,7 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
     <div v-else-if="albums?.length" class="album-carousel">
       <div v-for="album in previewAlbums" :key="album.id" class="album-card">
         <div class="album-cover">
-          <ArtistImage :src="album.image" :alt="album.title" icon="Music" :size="18" />
-          <div class="album-play">
-            <Play stroke-width="1" :size="16" />
-          </div>
+          <FallbackArtwork :src="album.image" :alt="album.title" icon="Music" :size="18" />
         </div>
         <p class="album-title">{{ album.title }}</p>
       </div>
@@ -57,9 +54,9 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
 </template>
 
 <style scoped lang="scss">
-@use "../styles/section-shared";
-@use "../styles/album-card";
-@use "../styles/carousel";
+@use '../styles/section-shared';
+@use '../styles/album-card';
+@use '../styles/carousel';
 
 .see-all {
   display: inline-flex;
