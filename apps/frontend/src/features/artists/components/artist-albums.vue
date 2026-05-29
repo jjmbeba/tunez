@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const MAX_ALBUMS = 12;
 
-const { data: albums, isLoading: isAlbumsLoading } = useArtistAlbums(props.name);
+const { data: albums, isLoading, error } = useArtistAlbums(props.name);
 
 const previewAlbums = computed(() => {
   const list = albums.value;
@@ -23,7 +23,7 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
 </script>
 
 <template>
-  <section v-if="albums?.length" class="section">
+  <section class="section">
     <div class="section-header">
       <h2 class="section-title">
         <Disc3 stroke-width="1" :size="16" />
@@ -39,8 +39,9 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
       </RouterLink>
     </div>
 
-    <div v-if="isAlbumsLoading" class="state">Loading albums...</div>
-    <div v-else class="album-carousel">
+    <div v-if="isLoading" class="state">Loading albums...</div>
+    <div v-else-if="error" class="state error">{{ error }}</div>
+    <div v-else-if="albums?.length" class="album-carousel">
       <div v-for="album in previewAlbums" :key="album.id" class="album-card" tabindex="0">
         <div class="album-cover">
           <ArtistImage :src="album.image" :alt="album.title" icon="Music" :size="18" />
@@ -72,6 +73,10 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
   &:hover {
     color: var(--color-text);
   }
+}
+
+.state.error {
+  color: var(--color-danger);
 }
 
 .album-carousel {

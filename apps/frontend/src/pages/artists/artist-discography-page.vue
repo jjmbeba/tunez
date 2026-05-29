@@ -16,7 +16,7 @@ function goBack() {
 </script>
 
 <template>
-  <section class="minimal">
+  <section class="page">
     <button class="back" type="button" @click="goBack">
       <ArrowLeft stroke-width="1" :size="14" />
       <span>Back to artist</span>
@@ -57,18 +57,7 @@ function goBack() {
 
 <style scoped lang="scss">
 @use "../../features/artists/styles/album-card";
-
-.minimal {
-  min-height: 100%;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.5;
-  padding: 24px 32px 48px;
-  max-width: 800px;
-  margin: 0 auto;
-}
+@use "../../features/artists/styles/page";
 
 .back {
   display: inline-flex;

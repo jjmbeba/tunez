@@ -1,25 +1,11 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useArtistSearch } from "@/composables/use-artist";
 import ArtistImage from "@/features/artists/components/artist-image.vue";
 
-const query = ref("");
-const debouncedQuery = ref("");
 const router = useRouter();
-
-let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-
-watch(query, (val) => {
-  if (debounceTimer) clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    debouncedQuery.value = val;
-  }, 300);
-});
-
-const { data: results, isLoading, isError, error } = useArtistSearch(debouncedQuery);
-const showResults = computed(() => debouncedQuery.value.length >= 2);
+const { query, showResults, data: results, isLoading, isError, error } = useArtistSearch();
 
 function goToArtist(name: string) {
   router.push(`/artists/${encodeURIComponent(name)}`);
@@ -57,7 +43,7 @@ function goToArtist(name: string) {
     </div>
 
     <div v-else-if="results?.length === 0" class="state">
-      No artists found for "{{ debouncedQuery }}"
+      No artists found for "{{ query }}"
     </div>
 
     <div v-else class="results-grid">

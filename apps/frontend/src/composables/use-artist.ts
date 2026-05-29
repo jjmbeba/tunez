@@ -1,7 +1,7 @@
 import { get } from "@/lib/api";
 import { useQuery } from "@tanstack/vue-query";
 import type { Album, Artist, ArtistBrief, ArtistSearchResult } from "@tunes/types";
-import { computed, type Ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export function useArtist(name: string) {
   return useQuery({
@@ -32,14 +32,29 @@ export function useArtistSimilar(name: string) {
   });
 }
 
-export function useArtistSearch(query: Ref<string>) {
-  return useQuery({
-    queryKey: ["artist-search", query],
+export function useArtistSearch() {
+  const query = ref("");
+  const debouncedQuery = ref("");
+
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  watch(query, (val) => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      debouncedQuery.value = val;
+    }, 300);
+  });
+
+  const queryResult = useQuery({
+    queryKey: ["artist-search", debouncedQuery],
     queryFn: async () => {
       return await get<ArtistSearchResult[]>(
-        `/artists/search?q=${encodeURIComponent(query.value)}&limit=10`,
+        `/artists/search?q=${encodeURIComponent(debouncedQuery.value)}&limit=10`,
       );
     },
-    enabled: computed(() => query.value.length >= 2),
+    enabled: computed(() => debouncedQuery.value.length >= 2),
   });
+
+  const showResults = computed(() => debouncedQuery.value.length >= 2);
+
+  return { query, showResults, ...queryResult };
 }
