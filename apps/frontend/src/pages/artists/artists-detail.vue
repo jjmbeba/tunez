@@ -4,7 +4,8 @@ import ArtistAlbums from "@/features/artists/components/artist-albums.vue";
 import ArtistBio from "@/features/artists/components/artist-bio.vue";
 import ArtistProfileShell from "@/features/artists/components/artist-profile-shell.vue";
 import SimilarArtists from "@/features/artists/components/similar-artists.vue";
-import { ArrowLeft, Headphones, Music } from "lucide-vue-next";
+import ArtistImage from "@/features/artists/components/artist-image.vue";
+import { ArrowLeft, Headphones } from "lucide-vue-next";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
@@ -42,16 +43,7 @@ function goBack() {
       <template v-else-if="artist">
         <header class="hero">
           <div class="hero-media">
-            <img
-              v-if="artist.image"
-              :src="artist.image"
-              :alt="artist.name"
-              class="hero-image"
-              @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
-            />
-            <div v-else class="hero-image-placeholder">
-              <Music stroke-width="1" :size="32" />
-            </div>
+            <ArtistImage :src="artist.image" :alt="artist.name" icon="Music" :size="32" />
           </div>
 
           <div class="hero-info">
@@ -127,26 +119,13 @@ function goBack() {
 
 .hero-media {
   flex-shrink: 0;
-}
-
-.hero-image {
   width: 144px;
   height: 144px;
   border-radius: 8px;
-  object-fit: cover;
+  overflow: hidden;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-}
-
-.hero-image-placeholder {
-  width: 144px;
-  height: 144px;
-  border-radius: 8px;
   background: var(--color-surface);
   border: 1px solid var(--minimal-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-muted);
 }
 
 .hero-info {
@@ -251,11 +230,6 @@ function goBack() {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.25; }
-}
-
 @keyframes reveal-up {
   from {
     opacity: 0;
@@ -277,8 +251,7 @@ function goBack() {
     gap: 16px;
   }
 
-  .hero-image,
-  .hero-image-placeholder {
+  .hero-media {
     width: 120px;
     height: 120px;
   }

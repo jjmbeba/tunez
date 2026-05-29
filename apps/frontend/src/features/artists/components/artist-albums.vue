@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ChevronRight, Disc3, Music, Play } from "lucide-vue-next";
+import { ChevronRight, Disc3, Play } from "lucide-vue-next";
 import { useArtistAlbums } from "@/composables/use-artist";
 import { computed } from "vue";
+import ArtistImage from "@/features/artists/components/artist-image.vue";
 import { RouterLink } from "vue-router";
 
 const props = defineProps<{
@@ -42,16 +43,7 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
     <div v-else class="album-carousel">
       <div v-for="album in previewAlbums" :key="album.id" class="album-card" tabindex="0">
         <div class="album-cover">
-          <img
-            v-if="album.image"
-            :src="album.image"
-            :alt="album.title"
-            loading="lazy"
-            @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
-          />
-          <div v-else class="album-cover-placeholder">
-            <Music stroke-width="1" :size="18" />
-          </div>
+          <ArtistImage :src="album.image" :alt="album.title" icon="Music" :size="18" />
           <div class="album-play">
             <Play stroke-width="1" :size="16" />
           </div>
@@ -65,6 +57,7 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
 <style scoped lang="scss">
 @use "../styles/section-shared";
 @use "../styles/album-card";
+@use "../styles/carousel";
 
 .see-all {
   display: inline-flex;
@@ -82,45 +75,9 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
 }
 
 .album-carousel {
-  display: flex;
-  align-items: flex-start;
+  @include carousel.carousel;
   gap: 12px;
   min-height: 132px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-inline-end: 8px;
-  scroll-snap-type: x proximity;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-
-  &::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: var(--radius-full);
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
-
-      &::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.12);
-      }
-    }
-  }
-
-  @media (hover: none) {
-    scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.12);
-    }
-  }
 }
 
 .album-carousel .album-card {

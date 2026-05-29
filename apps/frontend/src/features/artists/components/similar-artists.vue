@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Radio, Users } from "lucide-vue-next";
+import { Users } from "lucide-vue-next";
 import { useArtistSimilar } from "@/composables/use-artist";
 import { useRouter } from "vue-router";
+import ArtistImage from "@/features/artists/components/artist-image.vue";
 
 const router = useRouter();
 
@@ -35,16 +36,7 @@ function goToArtist(artistName: string) {
         @click="goToArtist(s.name)"
       >
         <div class="similar-avatar">
-          <img
-            v-if="s.image"
-            :src="s.image"
-            :alt="s.name"
-            loading="lazy"
-            @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
-          />
-          <div v-else class="similar-avatar-placeholder">
-            <Radio stroke-width="1" :size="14" />
-          </div>
+          <ArtistImage :src="s.image" :alt="s.name" icon="Radio" :size="14" />
         </div>
         <span class="similar-name">{{ s.name }}</span>
       </button>
@@ -54,47 +46,12 @@ function goToArtist(artistName: string) {
 
 <style scoped lang="scss">
 @use "../styles/section-shared";
+@use "../styles/carousel";
 
 .similar-carousel {
-  display: flex;
-  align-items: flex-start;
+  @include carousel.carousel;
   gap: 16px;
   min-height: 120px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-inline-end: 8px;
-  scroll-snap-type: x proximity;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-
-  &::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: var(--radius-full);
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
-
-      &::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.12);
-      }
-    }
-  }
-
-  @media (hover: none) {
-    scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.12);
-    }
-  }
 }
 
 .similar-card {
@@ -127,22 +84,6 @@ function goToArtist(artistName: string) {
   flex-shrink: 0;
   background: var(--color-surface);
   border: 1px solid var(--minimal-border);
-}
-
-.similar-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.similar-avatar-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-muted);
 }
 
 .similar-name {

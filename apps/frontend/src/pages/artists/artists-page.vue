@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
-import { Search, Radio } from "lucide-vue-next";
+import { Search } from "lucide-vue-next";
 import { useArtistSearch } from "@/composables/use-artist";
+import ArtistImage from "@/features/artists/components/artist-image.vue";
 
 const query = ref("");
 const debouncedQuery = ref("");
@@ -68,16 +69,7 @@ function goToArtist(name: string) {
         @click="goToArtist(a.name)"
       >
         <div class="result-avatar">
-          <img
-            v-if="a.image"
-            :src="a.image"
-            :alt="a.name"
-            loading="lazy"
-            @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
-          />
-          <div v-else class="result-avatar-placeholder">
-            <Radio stroke-width="1" :size="18" />
-          </div>
+          <ArtistImage :src="a.image" :alt="a.name" icon="Radio" :size="18" />
         </div>
         <span class="result-name">{{ a.name }}</span>
       </button>
@@ -188,22 +180,6 @@ h1 {
   border: 1px solid var(--minimal-border);
 }
 
-.result-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.result-avatar-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-muted);
-}
-
 .result-name {
   width: 100%;
   min-height: 2.6em;
@@ -244,13 +220,5 @@ h1 {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 0.25;
-  }
-}
+
 </style>

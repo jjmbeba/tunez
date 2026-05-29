@@ -1,6 +1,6 @@
 import { get } from "@/lib/api";
 import { useQuery } from "@tanstack/vue-query";
-import type { Album, Artist, ArtistSearchResult } from "@tunes/types";
+import type { Album, Artist, ArtistBrief, ArtistSearchResult } from "@tunes/types";
 import { computed, type Ref } from "vue";
 
 export function useArtist(name: string) {
@@ -25,7 +25,7 @@ export function useArtistSimilar(name: string) {
   return useQuery({
     queryKey: ["artists-similar", name],
     queryFn: async () => {
-      return await get<Array<{ name: string; image: string; url: string }>>(
+      return await get<ArtistBrief[]>(
         `/artists/${encodeURIComponent(name)}/similar`,
       );
     },

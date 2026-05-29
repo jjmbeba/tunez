@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ArrowLeft, Music, Play } from "lucide-vue-next";
+import { ArrowLeft, Play } from "lucide-vue-next";
 import { useArtistAlbums } from "@/composables/use-artist";
 import { useRoute, useRouter } from "vue-router";
+import ArtistImage from "@/features/artists/components/artist-image.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -40,16 +41,7 @@ function goBack() {
           tabindex="0"
         >
           <div class="album-cover">
-            <img
-              v-if="album.image"
-              :src="album.image"
-              :alt="album.title"
-              loading="lazy"
-              @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
-            />
-            <div v-else class="album-cover-placeholder">
-              <Music stroke-width="1" :size="24" />
-            </div>
+            <ArtistImage :src="album.image" :alt="album.title" icon="Music" :size="24" />
             <div class="album-play">
               <Play stroke-width="1" :size="18" />
             </div>
@@ -139,8 +131,5 @@ function goBack() {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.25; }
-}
+
 </style>
