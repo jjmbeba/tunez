@@ -1,32 +1,87 @@
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import { ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
+import { Search, Radio } from "lucide-vue-next";
+import { useArtistSearch } from "@/composables/use-artist";
 
 const query = ref("");
+const debouncedQuery = ref("");
 const router = useRouter();
 
-function search() {
-  const q = query.value.trim();
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-  if (q) {
-    router.push(`/artists/${encodeURIComponent(q)}`);
-  }
+watch(query, (val) => {
+  if (debounceTimer) clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    debouncedQuery.value = val;
+  }, 300);
+});
+
+const { data: results, isLoading, isError, error } = useArtistSearch(debouncedQuery);
+const showResults = computed(() => debouncedQuery.value.length >= 2);
+
+function goToArtist(name: string) {
+  router.push(`/artists/${encodeURIComponent(name)}`);
 }
+
 </script>
 
 <template>
   <section class="artist-search">
     <h1>Artists</h1>
-    <form class="search-form" @submit.prevent="search">
+
+    <div class="search-field">
+      <Search stroke-width="1" :size="16" class="search-icon" />
       <input
         v-model="query"
         type="text"
         placeholder="Search for an artist..."
         class="search-input"
       />
-      <button type="submit" class="search-btn">Search</button>
-    </form>
-    <p class="hint">Try: Nyashinski, Sauti Sol, Kendrick Lamar</p>
+    </div>
+
+    <div v-if="!showResults" class="state">
+      <p class="hint">Try: Nyashinski, Sauti Sol, Kendrick Lamar</p>
+    </div>
+
+    <div v-else-if="isLoading" class="results-grid">
+      <div v-for="n in 6" :key="n" class="skeleton-card">
+        <div class="skeleton-avatar" />
+        <div class="skeleton-label" />
+      </div>
+    </div>
+
+    <div v-else-if="isError" class="state state-error">
+      {{ error instanceof Error ? error.message : "Something went wrong" }}
+    </div>
+
+    <div v-else-if="results?.length === 0" class="state">
+      No artists found for "{{ debouncedQuery }}"
+    </div>
+
+    <div v-else class="results-grid">
+      <button
+        v-for="a in results"
+        :key="a.name"
+        type="button"
+        class="result-card"
+        @click="goToArtist(a.name)"
+      >
+        <div class="result-avatar">
+          <img
+            v-if="a.image"
+            :src="a.image"
+            :alt="a.name"
+            loading="lazy"
+            @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
+          />
+          <div v-else class="result-avatar-placeholder">
+            <Radio stroke-width="1" :size="18" />
+          </div>
+        </div>
+        <span class="result-name">{{ a.name }}</span>
+      </button>
+    </div>
   </section>
 </template>
 
@@ -45,14 +100,22 @@ h1 {
   letter-spacing: -0.015em;
 }
 
-.search-form {
+.search-field {
+  position: relative;
   display: flex;
-  gap: var(--space-2);
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--minimal-subtle);
+  pointer-events: none;
 }
 
 .search-input {
   flex: 1;
-  padding: 10px 14px;
+  padding: 10px 14px 10px 36px;
   border-radius: var(--radius-md);
   border: 1px solid var(--minimal-border);
   background: #ffffff;
@@ -71,26 +134,123 @@ h1 {
   border-color: var(--minimal-muted);
 }
 
-.search-btn {
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--minimal-border);
-  background: var(--minimal-ink);
-  color: #ffffff;
-  font-family: var(--font-minimal);
+.state {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 48px 0;
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.15s ease;
 }
 
-.search-btn:hover {
-  opacity: 0.85;
+.state-error {
+  color: #d32f2f;
 }
 
 .hint {
-  margin-top: var(--space-6);
-  color: var(--minimal-subtle);
+  margin: 0;
   font-size: 12px;
+}
+
+.results-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-block-start: var(--space-6);
+}
+
+.result-card {
+  flex: 0 0 auto;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--color-text);
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.result-card:hover {
+  background: var(--color-surface);
+}
+
+.result-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--minimal-border);
+}
+
+.result-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.result-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+}
+
+.result-name {
+  width: 100%;
+  min-height: 2.6em;
+  max-height: 2.6em;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.skeleton-card {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+}
+
+.skeleton-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-label {
+  width: 64px;
+  height: 11px;
+  border-radius: 4px;
+  background: var(--color-surface);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.25;
+  }
 }
 </style>

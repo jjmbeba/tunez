@@ -25,7 +25,18 @@ function goBack() {
         <span>Artists</span>
       </button>
 
-      <div v-if="isArtistLoading" class="state">Loading artist...</div>
+      <div v-if="isArtistLoading" class="hero-skeleton">
+        <div class="skeleton-image" />
+        <div class="skeleton-info">
+          <div class="skeleton-line skeleton-line--wide" />
+          <div class="skeleton-line skeleton-line--medium" />
+          <div class="skeleton-tags">
+            <span class="skeleton-tag" />
+            <span class="skeleton-tag" />
+            <span class="skeleton-tag" />
+          </div>
+        </div>
+      </div>
       <div v-else-if="error" class="state error">{{ error }}</div>
 
       <template v-else-if="artist">
@@ -184,6 +195,65 @@ function goBack() {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.01em;
+}
+
+.hero-skeleton {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.skeleton-image {
+  width: 144px;
+  height: 144px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: var(--color-surface);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-info {
+  flex: 1;
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: var(--color-surface);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line--wide {
+  width: 75%;
+  height: 24px;
+}
+
+.skeleton-line--medium {
+  width: 45%;
+}
+
+.skeleton-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.skeleton-tag {
+  width: 48px;
+  height: 22px;
+  border-radius: 4px;
+  background: var(--color-surface);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.25; }
 }
 
 @keyframes reveal-up {

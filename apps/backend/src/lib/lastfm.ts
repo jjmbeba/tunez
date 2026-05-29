@@ -1,5 +1,6 @@
 import type {
   LastfmArtistResponse,
+  LastfmSearchResponse,
   LastfmSimilarArtists,
   LastfmTopAlbumsResponse,
 } from "./lastfm.types.js";
@@ -66,6 +67,17 @@ export async function getSimilarArtists(
     artist,
     limit: limit.toString(),
     autocorrect: "1",
+  });
+}
+
+export async function searchArtists(
+  query: string,
+  limit = 10,
+): Promise<LastfmSearchResponse> {
+  return callApi<LastfmSearchResponse>({
+    method: "artist.search",
+    artist: query,
+    limit: limit.toString(),
   });
 }
 

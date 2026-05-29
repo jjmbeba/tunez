@@ -1,6 +1,7 @@
 import { get } from "@/lib/api";
 import { useQuery } from "@tanstack/vue-query";
-import type { Album, Artist } from "@tunes/types";
+import type { Album, Artist, ArtistSearchResult } from "@tunes/types";
+import { computed, type Ref } from "vue";
 
 export function useArtist(name: string) {
   return useQuery({
@@ -28,5 +29,17 @@ export function useArtistSimilar(name: string) {
         `/artists/${encodeURIComponent(name)}/similar`,
       );
     },
+  });
+}
+
+export function useArtistSearch(query: Ref<string>) {
+  return useQuery({
+    queryKey: ["artist-search", query],
+    queryFn: async () => {
+      return await get<ArtistSearchResult[]>(
+        `/artists/search?q=${encodeURIComponent(query.value)}&limit=10`,
+      );
+    },
+    enabled: computed(() => query.value.length >= 2),
   });
 }

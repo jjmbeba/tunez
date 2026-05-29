@@ -23,7 +23,12 @@ function goBack() {
 
     <h1 class="page-title">Discography</h1>
 
-    <div v-if="isLoading" class="state">Loading albums...</div>
+    <div v-if="isLoading" class="album-grid">
+      <div v-for="n in 8" :key="n" class="skeleton-card">
+        <div class="skeleton-cover" />
+        <div class="skeleton-label" />
+      </div>
+    </div>
     <div v-else-if="error" class="state error">{{ error }}</div>
 
     <template v-else-if="albums?.length">
@@ -111,5 +116,31 @@ function goBack() {
 
 .state.error {
   color: var(--color-danger);
+}
+
+.skeleton-card {
+  padding: 6px;
+}
+
+.skeleton-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background: var(--color-surface);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-label {
+  width: 80%;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--color-surface);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.25; }
 }
 </style>

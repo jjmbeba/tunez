@@ -1,4 +1,4 @@
-import type { Album, ApiResponse, Artist, ArtistBrief } from "@tunes/types";
+import type { Album, ApiResponse, Artist, ArtistBrief, ArtistSearchResult } from "@tunes/types";
 import { Hono } from "hono";
 import { TtlCache } from "../lib/cache.js";
 import * as lastfm from "../lib/lastfm.js";
@@ -30,6 +30,46 @@ function toArtist(raw: LastfmArtistResponse["artist"]): Artist {
     tags: raw.tags?.tag?.map((t) => t.name) ?? [],
   };
 }
+
+router.get("/search", async (c) => {
+  try {
+    const query = c.req.query("q");
+    const limit = Number(c.req.query("limit")) || 10;
+
+    if (!query || query.length < 2) {
+      return c.json(
+        { success: false, error: "Query must be at least 2 characters" } satisfies ApiResponse<never>,
+        400,
+      );
+    }
+
+    const cacheKey = `artist-search:${query.toLowerCase()}`;
+    const cached = cache.get<ArtistSearchResult[]>(cacheKey);
+
+    if (cached) {
+      return c.json({ success: true, data: cached } satisfies ApiResponse<ArtistSearchResult[]>);
+    }
+
+    const raw = await lastfm.searchArtists(query, limit);
+    const results: ArtistSearchResult[] = raw.results.artistmatches.artist.map((a) => ({
+      name: a.name,
+      mbid: a.mbid,
+      url: a.url,
+      image: pickImage(a.image),
+      listeners: Number(a.listeners ?? 0),
+    }));
+
+    cache.set(cacheKey, results);
+
+    return c.json({ success: true, data: results } satisfies ApiResponse<ArtistSearchResult[]>);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return c.json(
+      { success: false, error: message } satisfies ApiResponse<never>,
+      502,
+    );
+  }
+});
 
 router.get("/:name", async (c) => {
   try {

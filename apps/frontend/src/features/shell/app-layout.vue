@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppBottomNav from "./AppBottomNav.vue";
+import AppBottomNav from "./app-bottom-nav.vue";
 import AppHeaderMobile from "./app-header-mobile.vue";
 import AppSidebar from "./app-sidebar.vue";
 import PersistentPlayer from "./persistent-player.vue";

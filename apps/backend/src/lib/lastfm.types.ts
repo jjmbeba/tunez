@@ -69,6 +69,28 @@ export interface LastfmTopAlbumsResponse {
   };
 }
 
+export interface LastfmSearchResponse {
+  results: {
+    "opensearch:Query": Record<string, string>;
+    "opensearch:totalResults": string;
+    "opensearch:startIndex": string;
+    "opensearch:itemsPerPage": string;
+    artistmatches: {
+      artist: Array<{
+        name: string;
+        mbid: string;
+        url: string;
+        image: LastfmImage[];
+        streamable: string;
+        listeners: string;
+      }>;
+    };
+    "@attr": {
+      for: string;
+    };
+  };
+}
+
 export interface LastfmErrorResponse {
   error: number;
   message: string;
