@@ -2,9 +2,9 @@
 import { useArtist } from "@/composables/use-artist";
 import ArtistAlbums from "@/features/artists/components/artist-albums.vue";
 import ArtistBio from "@/features/artists/components/artist-bio.vue";
-import ArtistProfileShell from "@/features/artists/components/artist-profile-shell.vue";
 import SimilarArtists from "@/features/artists/components/similar-artists.vue";
-import ArtistImage from "@/features/artists/components/artist-image.vue";
+import DetailSheetShell from "@/features/shell/detail-sheet-shell.vue";
+import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
 import { ArrowLeft, Headphones } from "lucide-vue-next";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -20,7 +20,7 @@ function goBack() {
 </script>
 
 <template>
-  <ArtistProfileShell>
+  <DetailSheetShell fallback-route="/artists">
     <section class="page">
       <button class="back" type="button" @click="goBack">
         <ArrowLeft stroke-width="1" :size="14" />
@@ -44,7 +44,7 @@ function goBack() {
       <template v-else-if="artist">
         <header class="hero">
           <div class="hero-media">
-            <ArtistImage :src="artist.image" :alt="artist.name" icon="Music" :size="32" />
+            <FallbackArtwork :src="artist.image" :alt="artist.name" icon="Music" :size="32" />
           </div>
 
           <div class="hero-info">
@@ -68,7 +68,7 @@ function goBack() {
         <SimilarArtists :name="name" />
       </template>
     </section>
-  </ArtistProfileShell>
+  </DetailSheetShell>
 </template>
 
 <style scoped lang="scss">

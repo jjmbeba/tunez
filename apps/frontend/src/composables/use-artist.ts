@@ -1,7 +1,8 @@
 import { get } from "@/lib/api";
+import { useDebouncedSearchQuery } from "@/composables/use-debounced-search-query";
 import { useQuery } from "@tanstack/vue-query";
 import type { Album, Artist, ArtistBrief, ArtistSearchResult } from "@tunes/types";
-import { computed, ref, toValue, watch } from "vue";
+import { computed, toValue } from "vue";
 import type { MaybeRefOrGetter } from "vue";
 
 function useArtistName(name: MaybeRefOrGetter<string>) {
@@ -47,16 +48,7 @@ export function useArtistSimilar(name: MaybeRefOrGetter<string>) {
 }
 
 export function useArtistSearch() {
-  const query = ref("");
-  const debouncedQuery = ref("");
-
-  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-  watch(query, (val) => {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      debouncedQuery.value = val;
-    }, 300);
-  });
+  const { query, debouncedQuery, isActive: showResults } = useDebouncedSearchQuery();
 
   const queryResult = useQuery({
     queryKey: ["artist-search", debouncedQuery],
@@ -65,10 +57,8 @@ export function useArtistSearch() {
         `/artists/search?q=${encodeURIComponent(debouncedQuery.value)}&limit=10`,
       );
     },
-    enabled: computed(() => debouncedQuery.value.length >= 2),
+    enabled: showResults,
   });
-
-  const showResults = computed(() => debouncedQuery.value.length >= 2);
 
   return { query, debouncedQuery, showResults, ...queryResult };
 }

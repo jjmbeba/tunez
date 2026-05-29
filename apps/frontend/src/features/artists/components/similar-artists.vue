@@ -2,7 +2,7 @@
 import { Users } from "lucide-vue-next";
 import { useArtistSimilar } from "@/composables/use-artist";
 import { useRouter } from "vue-router";
-import ArtistImage from "@/features/artists/components/artist-image.vue";
+import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
 import { toRef } from "vue";
 
 const router = useRouter();
@@ -38,7 +38,7 @@ function goToArtist(artistName: string) {
         @click="goToArtist(s.name)"
       >
         <div class="similar-avatar">
-          <ArtistImage :src="s.image" :alt="s.name" icon="Radio" :size="14" />
+          <FallbackArtwork :src="s.image" :alt="s.name" icon="Radio" :size="14" />
         </div>
         <span class="similar-name">{{ s.name }}</span>
       </button>

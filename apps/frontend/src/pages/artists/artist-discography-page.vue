@@ -2,7 +2,7 @@
 import { ArrowLeft, Play } from "lucide-vue-next";
 import { useArtistAlbums } from "@/composables/use-artist";
 import { useRoute, useRouter } from "vue-router";
-import ArtistImage from "@/features/artists/components/artist-image.vue";
+import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -41,7 +41,7 @@ function goBack() {
           tabindex="0"
         >
           <div class="album-cover">
-            <ArtistImage :src="album.image" :alt="album.title" icon="Music" :size="24" />
+            <FallbackArtwork :src="album.image" :alt="album.title" icon="Music" :size="24" />
             <div class="album-play">
               <Play stroke-width="1" :size="18" />
             </div>
