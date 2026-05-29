@@ -32,6 +32,17 @@ export class TtlCache {
     return this.store.has(key);
   }
 
+  async fetch<T>(key: string, fetcher: () => Promise<T>, ttlMs?: number): Promise<T> {
+    const cached = this.get<T>(key);
+
+    if (cached !== undefined) return cached;
+
+    const data = await fetcher();
+    this.set(key, data, ttlMs);
+
+    return data;
+  }
+
   clear(): void {
     this.store.clear();
   }
