@@ -10,8 +10,8 @@ class ApiError extends Error {
 }
 
 export async function get<T>(path: string): Promise<T> {
-  // URL constructor handles path joining correctly — no double slashes
-  const url = new URL(`/api${path}`, BASE_URL).href;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const url = new URL(`api${normalizedPath}`, `${BASE_URL}/`).href;
   const response = await fetch(url, {
     headers: {
       Accept: "application/json",

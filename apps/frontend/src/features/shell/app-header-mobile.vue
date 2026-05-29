@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { Search, User } from "lucide-vue-next";
+
+const router = useRouter();
+
+function goToArtistSearch() {
+  router.push("/artists");
+}
 </script>
 
 <template>
   <header class="mobile-header">
     <RouterLink to="/" class="shell-wordmark">Tunez</RouterLink>
     <div class="mobile-header-actions">
-      <button type="button" class="icon-btn" aria-label="Search">
+      <button type="button" class="icon-btn" aria-label="Search" @click="goToArtistSearch">
         <Search stroke-width="1.5" :size="20" />
       </button>
       <RouterLink to="/profile" class="icon-btn" aria-label="Profile">

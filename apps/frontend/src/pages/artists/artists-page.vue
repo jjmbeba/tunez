@@ -5,7 +5,8 @@ import { useArtistSearch } from "@/composables/use-artist";
 import ArtistImage from "@/features/artists/components/artist-image.vue";
 
 const router = useRouter();
-const { query, showResults, data: results, isLoading, isError, error } = useArtistSearch();
+const { query, debouncedQuery, showResults, data: results, isLoading, isError, error } =
+  useArtistSearch();
 
 function goToArtist(name: string) {
   router.push(`/artists/${encodeURIComponent(name)}`);
@@ -21,6 +22,7 @@ function goToArtist(name: string) {
       <Search stroke-width="1" :size="16" class="search-icon" />
       <input
         v-model="query"
+        aria-label="Search for an artist"
         type="text"
         placeholder="Search for an artist..."
         class="search-input"
@@ -43,7 +45,7 @@ function goToArtist(name: string) {
     </div>
 
     <div v-else-if="results?.length === 0" class="state">
-      No artists found for "{{ query }}"
+      No artists found for "{{ debouncedQuery }}"
     </div>
 
     <div v-else class="results-grid">

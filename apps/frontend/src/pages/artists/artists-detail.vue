@@ -6,11 +6,12 @@ import ArtistProfileShell from "@/features/artists/components/artist-profile-she
 import SimilarArtists from "@/features/artists/components/similar-artists.vue";
 import ArtistImage from "@/features/artists/components/artist-image.vue";
 import { ArrowLeft, Headphones } from "lucide-vue-next";
+import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
-const name = route.params.name as string;
+const name = computed(() => route.params.name as string);
 const { data: artist, isLoading: isArtistLoading, error } = useArtist(name);
 
 function goBack() {

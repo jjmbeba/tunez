@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { Music, Radio } from "lucide-vue-next";
 
 const props = defineProps<{
@@ -10,6 +10,13 @@ const props = defineProps<{
 }>();
 
 const imgError = ref(false);
+
+watch(
+  () => props.src,
+  () => {
+    imgError.value = false;
+  },
+);
 
 const iconComponent = computed(() => {
   if (props.icon === "Radio") return Radio;

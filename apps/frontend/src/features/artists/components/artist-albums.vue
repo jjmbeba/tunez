@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ChevronRight, Disc3, Play } from "lucide-vue-next";
 import { useArtistAlbums } from "@/composables/use-artist";
-import { computed } from "vue";
+import { computed, toRef } from "vue";
 import ArtistImage from "@/features/artists/components/artist-image.vue";
 import { RouterLink } from "vue-router";
 
@@ -11,7 +11,8 @@ const props = defineProps<{
 
 const MAX_ALBUMS = 12;
 
-const { data: albums, isLoading, error } = useArtistAlbums(props.name);
+const artistName = toRef(props, "name");
+const { data: albums, isLoading, error } = useArtistAlbums(artistName);
 
 const previewAlbums = computed(() => {
   const list = albums.value;
@@ -42,7 +43,7 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS);
     <div v-if="isLoading" class="state">Loading albums...</div>
     <div v-else-if="error" class="state error">{{ error }}</div>
     <div v-else-if="albums?.length" class="album-carousel">
-      <div v-for="album in previewAlbums" :key="album.id" class="album-card" tabindex="0">
+      <div v-for="album in previewAlbums" :key="album.id" class="album-card">
         <div class="album-cover">
           <ArtistImage :src="album.image" :alt="album.title" icon="Music" :size="18" />
           <div class="album-play">

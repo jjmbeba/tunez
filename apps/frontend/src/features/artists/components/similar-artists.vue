@@ -3,6 +3,7 @@ import { Users } from "lucide-vue-next";
 import { useArtistSimilar } from "@/composables/use-artist";
 import { useRouter } from "vue-router";
 import ArtistImage from "@/features/artists/components/artist-image.vue";
+import { toRef } from "vue";
 
 const router = useRouter();
 
@@ -10,7 +11,8 @@ const props = defineProps<{
   name: string;
 }>();
 
-const { data: similar, isLoading: isSimilarLoading } = useArtistSimilar(props.name);
+const artistName = toRef(props, "name");
+const { data: similar, isLoading: isSimilarLoading } = useArtistSimilar(artistName);
 
 function goToArtist(artistName: string) {
   router.push(`/artists/${encodeURIComponent(artistName)}`);
@@ -18,7 +20,7 @@ function goToArtist(artistName: string) {
 </script>
 
 <template>
-  <section v-if="similar?.length" class="section">
+  <section v-if="isSimilarLoading || similar?.length" class="section">
     <div class="section-header">
       <h2 class="section-title">
         <Users stroke-width="1" :size="16" />

@@ -34,14 +34,16 @@ function toArtist(raw: LastfmArtistResponse["artist"]): Artist {
 
 router.get("/search", async (c) => {
   try {
-    const query = c.req.query("q");
-    const limit = Number(c.req.query("limit")) || 10;
+    const query = c.req.query("q")?.trim();
+    const rawLimit = Number(c.req.query("limit"));
+    const limit = Number.isInteger(rawLimit) && rawLimit > 0 ? rawLimit : 10;
 
     if (!query || query.length < 2) {
       return c.json(fail("Query must be at least 2 characters"), 400);
     }
 
-    const results = await cache.fetch(`artist-search:${query.toLowerCase()}`, () =>
+    const cacheKey = `artist-search:${query.toLowerCase()}:limit=${limit}`;
+    const results = await cache.fetch(cacheKey, () =>
       lastfm.searchArtists(query, limit).then((raw) =>
         raw.results.artistmatches.artist.map((a) => ({
           name: a.name,

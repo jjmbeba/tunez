@@ -54,10 +54,5 @@ import PersistentPlayer from "./persistent-player.vue";
   flex: 1;
   overflow-y: auto;
   min-height: 0;
-  padding-bottom: var(--mobile-chrome-bottom);
-
-  @media (min-width: 1024px) {
-    padding-bottom: var(--desktop-chrome-bottom);
-  }
 }
 </style>
