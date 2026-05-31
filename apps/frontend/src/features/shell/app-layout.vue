@@ -14,10 +14,10 @@ import PersistentPlayer from "./persistent-player.vue";
         <main class="scrollable-content">
           <RouterView />
         </main>
+        <PersistentPlayer />
         <AppBottomNav />
       </div>
     </div>
-    <PersistentPlayer />
   </div>
 </template>
 
