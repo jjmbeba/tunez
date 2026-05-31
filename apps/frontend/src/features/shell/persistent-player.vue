@@ -41,7 +41,13 @@ function toggleMute() {
 
 <template>
   <div class="player-wrap">
-    <div v-if="store.error" class="player-error">
+    <div
+      v-if="store.error"
+      class="player-error"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
       <span>{{ store.error }}</span>
       <button type="button" class="player-btn player-error-close" @click="store.clearError()">
         <X stroke-width="1.5" :size="14" />
@@ -80,6 +86,7 @@ function toggleMute() {
       <input
         type="range"
         class="player-slider"
+        aria-label="Volume"
         min="0"
         max="1"
         step="0.01"

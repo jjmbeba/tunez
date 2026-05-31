@@ -16,6 +16,10 @@ const emit = defineEmits<{
 const audioStore = useAudioStore()
 const isCurrent = computed(() => props.station.id === audioStore.currentStation?.id)
 const isNowPlaying = computed(() => isCurrent.value && audioStore.isPlaying)
+const playButtonLabel = computed(() => {
+  const stationName = props.station.name || 'station'
+  return isNowPlaying.value ? `Pause ${stationName}` : `Play ${stationName}`
+})
 
 function handlePlay() {
   if (isCurrent.value) {
@@ -41,6 +45,8 @@ function handlePlay() {
         type="button"
         class="card-play"
         :class="{ 'card-play--active': isCurrent }"
+        :aria-label="playButtonLabel"
+        :aria-pressed="isNowPlaying"
         @click="handlePlay"
       >
         <Pause v-if="isNowPlaying" stroke-width="1.5" :size="20" />

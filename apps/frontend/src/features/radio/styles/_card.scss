@@ -39,6 +39,12 @@
   opacity: 1;
 }
 
+@media (hover: none) {
+  .card-play {
+    opacity: 1;
+  }
+}
+
 .station-card--active .card-cover {
   border-color: var(--color-text);
 }

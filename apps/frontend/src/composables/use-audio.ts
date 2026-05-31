@@ -9,6 +9,10 @@ function safePlay(audio: HTMLAudioElement) {
   audio.play().catch(() => {});
 }
 
+function getAudioSource(audio: HTMLAudioElement) {
+  return audio.currentSrc || audio.src;
+}
+
 export function useAudio(audioEl: Ref<HTMLAudioElement | null>) {
   const store = useAudioStore();
   let retryTimer: ReturnType<typeof setTimeout> | null = null;
@@ -42,6 +46,7 @@ export function useAudio(audioEl: Ref<HTMLAudioElement | null>) {
 
   function onPlay() {
     clearRetryTimer();
+    store.resetRetry();
     store.resume();
   }
 
@@ -85,7 +90,11 @@ export function useAudio(audioEl: Ref<HTMLAudioElement | null>) {
       if (!audio || !store.currentStation) return;
 
       if (playing) {
-        audio.load();
+        const currentSrc = getAudioSource(audio);
+        if (currentSrc !== store.currentStation.streamUrl) {
+          audio.src = store.currentStation.streamUrl;
+          audio.load();
+        }
         safePlay(audio);
       } else {
         audio.pause();
