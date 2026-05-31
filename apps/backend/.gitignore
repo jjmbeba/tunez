@@ -15,6 +15,12 @@ node_modules/
 .env
 .env.production
 
+# local database
+data/
+*.db
+*.db-*
+*.sqlite
+
 # logs
 logs/
 *.log

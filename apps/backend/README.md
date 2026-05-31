@@ -2,6 +2,16 @@ Prerequisites:
 
 - [Vercel CLI](https://vercel.com/docs/cli) installed globally
 
+Database and auth helpers:
+
+```
+pnpm --filter hono-backend db:auth:generate
+pnpm --filter hono-backend db:push
+```
+
+`db:auth:generate` only writes Better Auth core tables to `src/db/auth-schema.ts`.
+Keep app-owned tables in `src/db/app-schema.ts`.
+
 To develop locally:
 
 ```
