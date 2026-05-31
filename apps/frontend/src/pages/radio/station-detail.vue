@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { ArrowLeft, ExternalLink, Globe, Headphones, Radio } from "lucide-vue-next";
+import { ArrowLeft, ExternalLink, Globe, Headphones, Play, Radio } from "lucide-vue-next";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStation } from "@/composables/use-station";
 import DetailSheetShell from "@/features/shell/detail-sheet-shell.vue";
 import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
+import { useAudioStore } from "@/stores/audio";
 
 const route = useRoute();
 const router = useRouter();
 const id = computed(() => route.params.id as string);
 const { data: station, isLoading, error } = useStation(id);
+const audioStore = useAudioStore();
 
 function goBack() {
   router.push("/radio");
@@ -77,6 +79,10 @@ function goBack() {
         </div>
 
         <div class="actions">
+          <button type="button" class="btn-play" @click="audioStore.play(station)">
+            <Play stroke-width="1.5" :size="16" />
+            <span>Play</span>
+          </button>
           <a
             v-if="station.homepage"
             :href="station.homepage"

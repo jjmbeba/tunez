@@ -1,23 +1,12 @@
 .station-card {
   display: flex;
   flex-direction: column;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-  font-family: inherit;
   color: var(--color-text);
   border-radius: var(--radius-md);
   transition: background 0.15s ease;
 
   &:hover {
     background: var(--color-surface);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-text);
-    outline-offset: 2px;
   }
 }
 
@@ -38,12 +27,23 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.25);
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
 .station-card:hover .card-play,
-.station-card:focus-visible .card-play {
+.card-play:focus-visible {
+  opacity: 1;
+}
+
+.station-card--active .card-cover {
+  border-color: var(--color-text);
+}
+
+.card-play--active {
   opacity: 1;
 }
 
@@ -56,6 +56,18 @@
   flex-direction: column;
   gap: 4px;
   padding: 8px 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  width: 100%;
+  color: var(--color-text);
+
+  &:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
 }
 
 .card-name {
