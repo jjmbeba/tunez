@@ -43,3 +43,15 @@ export const requireAuth: MiddlewareHandler<AppBindings> = async (c, next) => {
 
   await next()
 }
+
+export type AuthenticatedUser = NonNullable<AppBindings['Variables']['user']>
+
+export function getAuthenticatedUser(c: Parameters<MiddlewareHandler<AppBindings>>[0]): AuthenticatedUser {
+  const user = c.get('user')
+
+  if (!user) {
+    throw new Error('Authenticated user is unavailable outside requireAuth boundary.')
+  }
+
+  return user
+}
