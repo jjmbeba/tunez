@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { Heart, Home, Radio } from "lucide-vue-next";
+import { Heart, Home, Radio, Users } from "lucide-vue-next";
 </script>
 
 <template>
@@ -12,6 +12,10 @@ import { Heart, Home, Radio } from "lucide-vue-next";
     <RouterLink to="/radio" class="bottom-nav-link">
       <Radio stroke-width="1.5" :size="20" />
       <span>Radio</span>
+    </RouterLink>
+    <RouterLink to="/artists" class="bottom-nav-link">
+      <Users stroke-width="1.5" :size="20" />
+      <span>Artists</span>
     </RouterLink>
     <RouterLink to="/favorites" class="bottom-nav-link">
       <Heart stroke-width="1.5" :size="20" />
@@ -42,11 +46,14 @@ import { Heart, Home, Radio } from "lucide-vue-next";
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 1px;
+  min-width: 0;
   color: var(--minimal-muted);
   text-decoration: none;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
   transition: color 0.2s;
 
   &:hover,
