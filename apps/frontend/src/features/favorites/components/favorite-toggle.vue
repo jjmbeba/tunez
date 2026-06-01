@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { Heart } from 'lucide-vue-next'
 import { useFavoritesStore } from '@/stores/favorites'
-import type { PlayableStation } from '@/features/radio/station-card.types'
+import type { PlayableStation } from '@/shared/types/station'
 
 const props = withDefaults(
   defineProps<{

@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { PlayableStation } from '@/features/radio/station-card.types'
+import type { PlayableStation } from '@/shared/types/station'
 
 export const useAudioStore = defineStore('audio', () => {
   const currentStation = ref<PlayableStation | null>(null)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
 import FavoriteToggle from '@/features/favorites/components/favorite-toggle.vue'
-import { ThumbsUp, Play, Pause } from 'lucide-vue-next'
+import { ThumbsUp, Play } from 'lucide-vue-next'
 import { useAudioStore } from '@/stores/audio'
 import { computed } from 'vue'
 import type { StationCardStation } from '../station-card.types'
@@ -60,7 +60,7 @@ function handlePlay() {
           <span class="equalizer__bar equalizer__bar--mid" />
           <span class="equalizer__bar" />
         </span>
-        <Pause v-else-if="isCurrent" stroke-width="1.5" :size="20" />
+        <Play v-else-if="isCurrent" stroke-width="1.5" :size="20" />
         <Play v-else stroke-width="1.5" :size="20" />
       </button>
     </div>

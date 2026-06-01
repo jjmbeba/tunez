@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Favorite } from '@tunes/types'
 import { ensureAnonymousSession } from '@/lib/auth-client'
-import type { PlayableStation } from '@/features/radio/station-card.types'
+import type { PlayableStation } from '@/shared/types/station'
 import { delete as deleteFavoriteRequest, get, post } from '@/lib/api'
 
 type PendingFavorite = {

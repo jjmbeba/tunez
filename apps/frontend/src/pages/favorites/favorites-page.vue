@@ -21,7 +21,7 @@ const stations = computed<StationCardStation[]>(() =>
 )
 
 function goToStation(id: string) {
-  router.push(`/radio/${id}`)
+  router.push(`/radio/${encodeURIComponent(id)}`)
 }
 
 onMounted(() => {

@@ -1,6 +1,4 @@
-import type { Station } from '@tunes/types'
-
-export type PlayableStation = Pick<Station, 'id' | 'name' | 'streamUrl' | 'favicon'>
+import type { PlayableStation } from '@/shared/types/station'
 
 export type StationCardStation = PlayableStation & {
   tags?: string[]
