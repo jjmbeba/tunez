@@ -14,6 +14,10 @@ const relativeTimeFormatter = new Intl.RelativeTimeFormat(undefined, {
 
 export function formatRelativeTime(value: string | Date): string {
   const date = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return 'Unknown time'
+  }
+
   let elapsed = (date.getTime() - Date.now()) / 1000
 
   for (const division of DIVISIONS) {

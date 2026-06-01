@@ -1,5 +1,6 @@
 import { onMounted, onUnmounted, watch } from 'vue'
 import type { Ref } from 'vue'
+import { ensureAnonymousSession } from '@/lib/auth-client'
 import type { PlayableStation } from '@/shared/types/station'
 import { useAudioStore } from '@/stores/audio'
 import { useHistoryStore, type HistoryEntryInput } from '@/stores/history'
@@ -32,6 +33,7 @@ export function useListeningHistory(audioEl: Ref<HTMLAudioElement | null>) {
   const audioStore = useAudioStore()
   const historyStore = useHistoryStore()
   let activeSession: ActiveSession | null = null
+  let anonymousSessionPrimed = false
 
   function ensureSession() {
     if (!audioStore.currentStation) return null
@@ -50,6 +52,13 @@ export function useListeningHistory(audioEl: Ref<HTMLAudioElement | null>) {
     const now = Date.now()
     session.playingStartedAt = now
     session.listenedAt ??= new Date(now)
+
+    if (!anonymousSessionPrimed) {
+      anonymousSessionPrimed = true
+      void ensureAnonymousSession().catch(() => {
+        anonymousSessionPrimed = false
+      })
+    }
   }
 
   function pausePlaybackSegment() {
