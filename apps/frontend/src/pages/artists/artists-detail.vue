@@ -4,28 +4,23 @@ import ArtistAlbums from "@/features/artists/components/artist-albums.vue";
 import ArtistBio from "@/features/artists/components/artist-bio.vue";
 import SimilarArtists from "@/features/artists/components/similar-artists.vue";
 import DetailSheetShell from "@/features/shell/detail-sheet-shell.vue";
+import BackLink from "@/shared/components/back-link.vue";
 import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
-import { ArrowLeft, Headphones } from "lucide-vue-next";
+import { Headphones } from "lucide-vue-next";
 import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
-const router = useRouter();
 const name = computed(() => route.params.name as string);
 const { data: artist, isLoading: isArtistLoading, error } = useArtist(name);
-
-function goBack() {
-  router.push("/artists");
-}
 </script>
 
 <template>
   <DetailSheetShell fallback-route="/artists">
     <section class="page">
-      <button class="back" type="button" @click="goBack">
-        <ArrowLeft stroke-width="1" :size="14" />
-        <span>Artists</span>
-      </button>
+      <div class="page-back-link">
+        <BackLink to="/artists" label="Artists" />
+      </div>
 
       <div v-if="isArtistLoading" class="hero-skeleton">
         <div class="skeleton-image" />
@@ -44,7 +39,7 @@ function goBack() {
       <template v-else-if="artist">
         <header class="hero">
           <div class="hero-media">
-            <FallbackArtwork :src="artist.image" :alt="artist.name" icon="Music" :size="32" />
+            <FallbackArtwork :src="artist.image" :alt="artist.name" :text="artist.name" />
           </div>
 
           <div class="hero-info">
@@ -72,31 +67,16 @@ function goBack() {
 </template>
 
 <style scoped lang="scss">
+@use "@/shared/styles/page";
+@use "@/shared/styles/state";
 @use "../../features/artists/styles/section-shared";
-@use "../../features/artists/styles/page";
-
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  padding: 0;
-  margin-bottom: 32px;
-  color: var(--color-muted);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-.back:hover {
-  color: var(--color-text);
-}
 
 .state.error {
   color: var(--color-danger);
+}
+
+.page-back-link {
+  margin-bottom: 32px;
 }
 
 .hero {

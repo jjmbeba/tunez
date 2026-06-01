@@ -1,16 +1,16 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Station } from '@tunes/types'
+import type { PlayableStation } from '@/shared/types/station'
 
 export const useAudioStore = defineStore('audio', () => {
-  const currentStation = ref<Station | null>(null)
+  const currentStation = ref<PlayableStation | null>(null)
 
   const isPlaying = ref(false)
   const volume = ref(0.8)
   const error = ref<string | null>(null)
   const retryCount = ref(0)
 
-  function play(station: Station) {
+  function play(station: PlayableStation) {
     currentStation.value = station
     isPlaying.value = true
     error.value = null

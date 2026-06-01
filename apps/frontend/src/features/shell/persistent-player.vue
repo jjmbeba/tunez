@@ -4,6 +4,7 @@ import { Play, Pause, VolumeX, Volume1, Volume2, X } from 'lucide-vue-next'
 import { useAudioStore } from '@/stores/audio'
 import { useAudio } from '@/composables/use-audio'
 import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
+import FavoriteToggle from '@/features/favorites/components/favorite-toggle.vue'
 
 const audioEl = ref<HTMLAudioElement | null>(null)
 const store = useAudioStore()
@@ -57,57 +58,57 @@ function toggleMute() {
     <footer class="player-bar">
       <audio ref="audioEl" preload="none" />
 
-    <div class="player-info">
-      <template v-if="store.currentStation">
-        <div class="player-artwork">
-          <FallbackArtwork
-            :src="store.currentStation.favicon"
-            :alt="store.currentStation.name"
-            icon="Radio"
-            :size="18"
-          />
-        </div>
-        <p class="player-name">{{ store.currentStation.name }}</p>
-      </template>
+      <div class="player-info">
+        <template v-if="store.currentStation">
+          <div class="player-artwork">
+            <FallbackArtwork
+              :src="store.currentStation.favicon"
+              :alt="store.currentStation.name"
+              :text="store.currentStation.name"
+            />
+          </div>
+          <p class="player-name">{{ store.currentStation.name }}</p>
+          <FavoriteToggle :station="store.currentStation" class="player-fav" />
+        </template>
 
-      <p v-else class="player-idle-text">No station selected</p>
-    </div>
+        <p v-else class="player-idle-text">No station selected</p>
+      </div>
 
-    <div class="player-volume">
-      <button
-        type="button"
-        class="player-btn player-vol-btn"
-        :disabled="!store.currentStation"
-        :aria-label="store.volume === 0 ? 'Unmute' : 'Mute'"
-        @click="toggleMute"
-      >
-        <component :is="VolumeIcon" stroke-width="1.5" :size="16" />
-      </button>
-      <input
-        type="range"
-        class="player-slider"
-        aria-label="Volume"
-        min="0"
-        max="1"
-        step="0.01"
-        :value="store.volume"
-        :disabled="!store.currentStation"
-        @input="store.setVolume(Number(($event.target as HTMLInputElement).value))"
-      />
-    </div>
+      <div class="player-volume">
+        <button
+          type="button"
+          class="player-btn player-vol-btn"
+          :disabled="!store.currentStation"
+          :aria-label="store.volume === 0 ? 'Unmute' : 'Mute'"
+          @click="toggleMute"
+        >
+          <component :is="VolumeIcon" stroke-width="1.5" :size="16" />
+        </button>
+        <input
+          type="range"
+          class="player-slider"
+          aria-label="Volume"
+          min="0"
+          max="1"
+          step="0.01"
+          :value="store.volume"
+          :disabled="!store.currentStation"
+          @input="store.setVolume(Number(($event.target as HTMLInputElement).value))"
+        />
+      </div>
 
-    <div class="player-controls">
-      <button
-        type="button"
-        class="player-btn player-btn--play"
-        :disabled="!store.currentStation"
-        :aria-label="store.isPlaying ? 'Pause' : 'Play'"
-        @click="togglePlay"
-      >
-        <Play v-if="!store.isPlaying" stroke-width="1.5" :size="20" />
-        <Pause v-else stroke-width="1.5" :size="20" />
-      </button>
-    </div>
+      <div class="player-controls">
+        <button
+          type="button"
+          class="player-btn player-btn--play"
+          :disabled="!store.currentStation"
+          :aria-label="store.isPlaying ? 'Pause' : 'Play'"
+          @click="togglePlay"
+        >
+          <Play v-if="!store.isPlaying" stroke-width="1.5" :size="20" />
+          <Pause v-else stroke-width="1.5" :size="20" />
+        </button>
+      </div>
     </footer>
   </div>
 </template>

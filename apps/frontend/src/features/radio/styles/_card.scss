@@ -20,6 +20,13 @@
   border: 1px solid var(--minimal-border);
 }
 
+.card-fav {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+}
+
 .card-play {
   position: absolute;
   inset: 0;
@@ -53,8 +60,35 @@
   opacity: 1;
 }
 
-:deep(svg) {
+.card-play :deep(svg) {
   color: #ffffff;
+}
+
+.equalizer {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+
+.equalizer__bar {
+  display: block;
+  width: 3px;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 1px;
+  transform-origin: center;
+  animation: equalize-bar 0.8s ease-in-out infinite;
+}
+
+.equalizer__bar--mid {
+  animation: equalize-bar-mid 0.6s ease-in-out infinite;
+  animation-delay: -0.2s;
+}
+
+.equalizer__bar:not(.equalizer__bar--mid):last-of-type {
+  animation-duration: 0.7s;
+  animation-delay: -0.4s;
 }
 
 .card-body {
@@ -62,11 +96,19 @@
   flex-direction: column;
   gap: 4px;
   padding: 8px 2px;
+  width: 100%;
+}
+
+.card-body-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
   font-family: inherit;
+  padding: 0;
   width: 100%;
   color: var(--color-text);
 
@@ -108,7 +150,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 2px;
+  margin-top: auto;
 }
 
 .card-votes {

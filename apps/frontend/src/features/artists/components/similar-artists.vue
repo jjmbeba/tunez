@@ -38,7 +38,7 @@ function goToArtist(artistName: string) {
         @click="goToArtist(s.name)"
       >
         <div class="similar-avatar">
-          <FallbackArtwork :src="s.image" :alt="s.name" icon="Radio" :size="14" />
+          <FallbackArtwork :src="s.image" :alt="s.name" :text="s.name" />
         </div>
         <span class="similar-name">{{ s.name }}</span>
       </button>

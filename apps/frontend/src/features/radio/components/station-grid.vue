@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { Radio, WifiOff } from "lucide-vue-next";
-import type { Station } from "@tunes/types";
-import StationCard from "./station-card.vue";
+import { Radio, WifiOff } from 'lucide-vue-next'
+import StationCard from './station-card.vue'
+import type { StationCardStation } from '../station-card.types'
 
 defineProps<{
-  stations: Station[] | null | undefined;
-  isLoading: boolean;
-  isError: boolean;
-  error?: unknown;
-  emptyMessage: string;
-}>();
+  stations: StationCardStation[] | null | undefined
+  isLoading: boolean
+  isError: boolean
+  error?: unknown
+  emptyMessage: string
+}>()
 
 const emit = defineEmits<{
-  select: [id: string];
-}>();
+  select: [id: string]
+}>()
 </script>
 
 <template>
@@ -47,5 +47,6 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
+@use "@/shared/styles/state";
 @use "../styles/grid";
 </style>
