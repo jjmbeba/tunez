@@ -1,30 +1,26 @@
 <script setup lang="ts">
-import { ArrowLeft, ExternalLink, Globe, Headphones, Play, Radio } from "lucide-vue-next";
+import { ExternalLink, Globe, Headphones, Play, Radio } from "lucide-vue-next";
 import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useStation } from "@/composables/use-station";
 import DetailSheetShell from "@/features/shell/detail-sheet-shell.vue";
 import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
+import BackLink from "@/shared/components/back-link.vue";
+import FavoriteToggle from "@/features/favorites/components/favorite-toggle.vue";
 import { useAudioStore } from "@/stores/audio";
 
 const route = useRoute();
-const router = useRouter();
 const id = computed(() => route.params.id as string);
 const { data: station, isLoading, error } = useStation(id);
 const audioStore = useAudioStore();
-
-function goBack() {
-  router.push("/radio");
-}
 </script>
 
 <template>
   <DetailSheetShell fallback-route="/radio">
     <section class="page">
-      <button class="back" type="button" @click="goBack">
-        <ArrowLeft stroke-width="1" :size="14" />
-        <span>Radio</span>
-      </button>
+      <div class="page-back-link">
+        <BackLink to="/radio" label="Radio" />
+      </div>
 
       <div v-if="isLoading" class="hero-skeleton">
         <div class="skeleton-image" />
@@ -46,7 +42,7 @@ function goBack() {
       <template v-else-if="station">
         <header class="hero">
           <div class="hero-media">
-            <FallbackArtwork :src="station.favicon" :alt="station.name" icon="Radio" :size="32" />
+            <FallbackArtwork :src="station.favicon" :alt="station.name" :text="station.name" />
           </div>
 
           <div class="hero-info">
@@ -93,6 +89,7 @@ function goBack() {
             <ExternalLink stroke-width="1.5" :size="14" />
             <span>Website</span>
           </a>
+          <FavoriteToggle :station="station" />
         </div>
       </template>
     </section>
@@ -100,29 +97,15 @@ function goBack() {
 </template>
 
 <style scoped lang="scss">
+@use "@/shared/styles/page";
+@use "@/shared/styles/state";
 @use "../../features/radio/styles/detail";
-
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  padding: 0;
-  margin-bottom: 32px;
-  color: var(--color-muted);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.15s ease;
-
-  &:hover {
-    color: var(--color-text);
-  }
-}
 
 .error {
   color: var(--color-danger);
+}
+
+.page-back-link {
+  margin-bottom: 32px;
 }
 </style>

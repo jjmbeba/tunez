@@ -45,7 +45,7 @@ const showSeeAll = computed(() => (albums.value?.length ?? 0) > MAX_ALBUMS)
     <div v-else-if="albums?.length" class="album-carousel">
       <div v-for="album in previewAlbums" :key="album.id" class="album-card">
         <div class="album-cover">
-          <FallbackArtwork :src="album.image" :alt="album.title" icon="Music" :size="18" />
+          <FallbackArtwork :src="album.image" :alt="album.title" :text="album.title" />
         </div>
         <p class="album-title">{{ album.title }}</p>
       </div>

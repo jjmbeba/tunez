@@ -5,6 +5,7 @@ import { useStations } from '@/composables/use-stations'
 import { useStationSearch } from '@/composables/use-station-search'
 import StationGrid from '@/features/radio/components/station-grid.vue'
 import SearchBar from '@/features/radio/components/search-bar.vue'
+import PageHeader from '@/shared/components/page-header.vue'
 
 const router = useRouter()
 
@@ -45,12 +46,10 @@ const emptyMessage = computed(() =>
 </script>
 
 <template>
-  <section class="radio-page">
-    <div class="page-header">
-      <h1 class="page-title">Radio</h1>
-      <p class="page-subtitle">Live stations from Kenya</p>
+  <section class="page">
+    <PageHeader title="Radio" subtitle="Live stations from Kenya">
       <SearchBar v-model="query" :is-loading="isSearchLoading" />
-    </div>
+    </PageHeader>
 
     <StationGrid
       :stations="stations"
@@ -64,27 +63,6 @@ const emptyMessage = computed(() =>
 </template>
 
 <style scoped lang="scss">
-.radio-page {
-  padding: var(--space-8) var(--space-6);
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.page-header {
-  margin-bottom: var(--space-6);
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--minimal-ink);
-  margin: 0 0 2px;
-  letter-spacing: -0.015em;
-}
-
-.page-subtitle {
-  color: var(--minimal-subtle);
-  font-size: 13px;
-  margin: 0 0 var(--space-4);
-}
+@use "@/shared/styles/page";
 </style>
+

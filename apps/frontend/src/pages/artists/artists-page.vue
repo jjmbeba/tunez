@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useArtistSearch } from "@/composables/use-artist";
+import PageHeader from "@/shared/components/page-header.vue";
 import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
 
 const router = useRouter();
@@ -15,8 +16,8 @@ function goToArtist(name: string) {
 </script>
 
 <template>
-  <section class="artist-search">
-    <h1>Artists</h1>
+  <section class="page">
+    <PageHeader title="Artists" />
 
     <div class="search-field">
       <Search stroke-width="1" :size="16" class="search-icon" />
@@ -57,7 +58,7 @@ function goToArtist(name: string) {
         @click="goToArtist(a.name)"
       >
         <div class="result-avatar">
-            <FallbackArtwork :src="a.image" :alt="a.name" icon="Radio" :size="18" />
+            <FallbackArtwork :src="a.image" :alt="a.name" :text="a.name" />
         </div>
         <span class="result-name">{{ a.name }}</span>
       </button>
@@ -66,24 +67,14 @@ function goToArtist(name: string) {
 </template>
 
 <style scoped lang="scss">
-.artist-search {
-  max-width: 36rem;
-  margin: 0 auto;
-  padding: var(--space-8) var(--space-4);
-}
-
-h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--minimal-ink);
-  margin-bottom: var(--space-6);
-  letter-spacing: -0.015em;
-}
+@use "@/shared/styles/page";
+@use "@/shared/styles/state";
 
 .search-field {
   position: relative;
   display: flex;
   align-items: center;
+  margin-bottom: var(--space-4);
 }
 
 .search-icon {
@@ -114,20 +105,10 @@ h1 {
   border-color: var(--minimal-muted);
 }
 
-.state {
-  text-align: center;
-  color: var(--color-muted);
-  padding: 48px 0;
-  font-size: 13px;
-}
-
-.state-error {
-  color: #d32f2f;
-}
-
 .hint {
   margin: 0;
   font-size: 12px;
+  color: var(--color-muted);
 }
 
 .results-grid {
@@ -207,6 +188,4 @@ h1 {
   background: var(--color-surface);
   animation: pulse 1.5s ease-in-out infinite;
 }
-
-
 </style>

@@ -1,28 +1,24 @@
 <script setup lang="ts">
-import { ArrowLeft, Play } from "lucide-vue-next";
+import { Play } from "lucide-vue-next";
 import { useArtistAlbums } from "@/composables/use-artist";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import BackLink from "@/shared/components/back-link.vue";
 import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
+import PageHeader from "@/shared/components/page-header.vue";
 
 const route = useRoute();
-const router = useRouter();
 const name = route.params.name as string;
 
 const { data: albums, isLoading, error } = useArtistAlbums(name);
-
-function goBack() {
-  router.push(`/artists/${encodeURIComponent(name)}`);
-}
 </script>
 
 <template>
   <section class="page">
-    <button class="back" type="button" @click="goBack">
-      <ArrowLeft stroke-width="1" :size="14" />
-      <span>Back to artist</span>
-    </button>
+    <div class="page-back-link">
+      <BackLink :to="`/artists/${encodeURIComponent(name)}`" label="Back to artist" />
+    </div>
 
-    <h1 class="page-title">Discography</h1>
+    <PageHeader title="Discography" />
 
     <div v-if="isLoading" class="album-grid">
       <div v-for="n in 8" :key="n" class="skeleton-card">
@@ -41,7 +37,7 @@ function goBack() {
           tabindex="0"
         >
           <div class="album-cover">
-            <FallbackArtwork :src="album.image" :alt="album.title" icon="Music" :size="24" />
+            <FallbackArtwork :src="album.image" :alt="album.title" :text="album.title" />
             <div class="album-play">
               <Play stroke-width="1" :size="18" />
             </div>
@@ -56,47 +52,16 @@ function goBack() {
 </template>
 
 <style scoped lang="scss">
+@use "@/shared/styles/page";
+@use "@/shared/styles/state";
 @use "../../features/artists/styles/album-card";
-@use "../../features/artists/styles/page";
-
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  padding: 0;
-  margin-bottom: 8px;
-  color: var(--color-muted);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-.back:hover {
-  color: var(--color-text);
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0 0 24px;
-  color: var(--color-text);
-  letter-spacing: -0.015em;
-  line-height: 1.2;
-}
-
-.state {
-  text-align: center;
-  color: var(--color-muted);
-  padding: 48px 0;
-  font-size: 13px;
-}
 
 .state.error {
   color: var(--color-danger);
+}
+
+.page-back-link {
+  margin-bottom: 8px;
 }
 
 .skeleton-card {
@@ -119,6 +84,4 @@ function goBack() {
   background: var(--color-surface);
   animation: pulse 1.5s ease-in-out infinite;
 }
-
-
 </style>

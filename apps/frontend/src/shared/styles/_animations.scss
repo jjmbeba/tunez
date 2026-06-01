@@ -18,3 +18,13 @@
     transform: translateY(0);
   }
 }
+
+@keyframes equalize-bar {
+  0%, 100% { transform: scaleY(0.3); }
+  50%      { transform: scaleY(1); }
+}
+
+@keyframes equalize-bar-mid {
+  0%, 100% { transform: scaleY(0.55); }
+  50%      { transform: scaleY(0.85); }
+}

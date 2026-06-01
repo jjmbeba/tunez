@@ -1,0 +1,48 @@
+.page {
+  padding: var(--space-8) var(--space-6);
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.page-header {
+  margin-bottom: var(--space-6);
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--minimal-ink);
+  margin: 0 0 2px;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  color: var(--minimal-subtle);
+  font-size: 13px;
+  margin: 0 0 var(--space-4);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--color-text);
+  }
+}
