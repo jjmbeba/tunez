@@ -18,28 +18,31 @@ export const validationHook: ValidationHook = (result, c) => {
   }
 }
 
-export const trimmedRequiredString = (field: string) =>
+export const trimmedRequiredString = (field: string, maxLength: number) =>
   v.pipe(
     v.string(`${field} must be a string`),
     v.trim(),
+    v.maxLength(maxLength, `${field} must be at most ${maxLength} characters`),
     v.nonEmpty(`${field} is required`),
   )
 
-export const requiredUrlString = (field: string) =>
+export const requiredUrlString = (field: string, maxLength: number) =>
   v.pipe(
     v.string(`${field} must be a string`),
     v.trim(),
+    v.maxLength(maxLength, `${field} must be at most ${maxLength} characters`),
     v.nonEmpty(`${field} is required`),
     v.url(`${field} must be a valid URL`),
   )
 
-export const normalizedOptionalUrl = (field: string) =>
+export const normalizedOptionalUrl = (field: string, maxLength: number) =>
   v.pipe(
     v.optional(
       v.nullable(
         v.pipe(
           v.string(`${field} must be a string when provided`),
           v.trim(),
+          v.maxLength(maxLength, `${field} must be at most ${maxLength} characters`),
           v.transform((input) => (input === '' ? null : input)),
           v.nullable(v.pipe(v.string(), v.url(`${field} must be a valid URL`))),
         ),

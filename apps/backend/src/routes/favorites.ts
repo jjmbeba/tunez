@@ -4,6 +4,7 @@ import { and, desc, eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import * as v from 'valibot'
 import { db } from '../db/index.js'
+import { ID_MAX_LENGTH, STATION_NAME_MAX_LENGTH, URL_MAX_LENGTH } from '../lib/field-limits.js'
 import { ok, fail } from '../lib/response.js'
 import {
   normalizedOptionalUrl,
@@ -19,14 +20,14 @@ const router = new Hono<AppBindings>()
 router.use('*', requireAuth)
 
 const createFavoriteSchema = v.object({
-  stationId: trimmedRequiredString('stationId'),
-  stationName: trimmedRequiredString('stationName'),
-  stationStreamUrl: requiredUrlString('stationStreamUrl'),
-  stationFavicon: normalizedOptionalUrl('stationFavicon'),
+  stationId: trimmedRequiredString('stationId', ID_MAX_LENGTH),
+  stationName: trimmedRequiredString('stationName', STATION_NAME_MAX_LENGTH),
+  stationStreamUrl: requiredUrlString('stationStreamUrl', URL_MAX_LENGTH),
+  stationFavicon: normalizedOptionalUrl('stationFavicon', URL_MAX_LENGTH),
 })
 
 const favoriteParamSchema = v.object({
-  id: trimmedRequiredString('stationId'),
+  id: trimmedRequiredString('id', ID_MAX_LENGTH),
 })
 
 function toFavorite(row: typeof favorite.$inferSelect): Favorite {
@@ -88,12 +89,12 @@ router.post('/', vValidator('json', createFavoriteSchema, validationHook), async
 
 router.delete('/:id', vValidator('param', favoriteParamSchema, validationHook), async (c) => {
   const user = getAuthenticatedUser(c)
-  const { id: stationId } = c.req.valid('param')
+  const { id: favoriteId } = c.req.valid('param')
 
   const [existing] = await db
     .select()
     .from(favorite)
-    .where(and(eq(favorite.userId, user.id), eq(favorite.stationId, stationId)))
+    .where(and(eq(favorite.userId, user.id), eq(favorite.id, favoriteId)))
     .limit(1)
 
   if (!existing) {
@@ -102,7 +103,7 @@ router.delete('/:id', vValidator('param', favoriteParamSchema, validationHook), 
 
   await db
     .delete(favorite)
-    .where(and(eq(favorite.userId, user.id), eq(favorite.stationId, stationId)))
+    .where(and(eq(favorite.userId, user.id), eq(favorite.id, favoriteId)))
 
   return c.json(ok(toFavorite(existing)))
 })

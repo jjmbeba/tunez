@@ -20,6 +20,9 @@ data/
 *.db
 *.db-*
 *.sqlite
+*.sqlite-*
+*.sqlite-wal
+*.sqlite-shm
 
 # logs
 logs/

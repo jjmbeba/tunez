@@ -21,7 +21,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:auth:generate": "npx @better-auth/cli@latest generate --config ./src/auth.ts --output ./src/db/auth-schema.ts --yes"
+    "db:auth:generate": "npx auth@1.6.12 generate --config ./src/auth.ts --output ./src/db/auth-schema.ts --yes"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",

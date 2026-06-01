@@ -16,7 +16,15 @@ export function getTrustedOrigins(value = process.env.BETTER_AUTH_TRUSTED_ORIGIN
     .map((origin) => origin.trim())
     .filter(Boolean);
 
-  return parsed && parsed.length > 0 ? parsed : defaultTrustedOrigins;
+  if (parsed && parsed.length > 0) {
+    return parsed;
+  }
+
+  if (isProductionRuntime()) {
+    throw new Error("getTrustedOrigins requires BETTER_AUTH_TRUSTED_ORIGINS in production.");
+  }
+
+  return defaultTrustedOrigins;
 }
 
 export function isProductionRuntime(nodeEnv = process.env.NODE_ENV): boolean {

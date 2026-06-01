@@ -9,3 +9,8 @@ export interface ListeningHistory {
   duration: number;
   createdAt: string;
 }
+
+export interface PaginatedListeningHistory {
+  items: ListeningHistory[];
+  nextCursor: string | null;
+}
