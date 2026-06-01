@@ -6,7 +6,7 @@ export const BACKEND_URL = (import.meta.env.VITE_API_BASE_URL ?? DEFAULT_BACKEND
 );
 
 export function buildBackendUrl(path: string): string {
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const normalizedPath = path.replace(/^\/+/, "");
 
   return new URL(normalizedPath, `${BACKEND_URL}/`).href;
 }
