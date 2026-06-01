@@ -2,18 +2,30 @@
   "name": "hono-backend",
   "type": "module",
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.6.12",
     "@hono/node-server": "^1.19.6",
+    "@hono/valibot-validator": "^0.6.1",
+    "@libsql/client": "^0.17.3",
     "@tunes/types": "workspace:*",
+    "better-auth": "^1.6.12",
     "dotenv": "^17.4.2",
-    "hono": "^4.12.18"
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.18",
+    "valibot": "^1.4.1"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:auth:generate": "npx auth@1.6.12 generate --config ./src/auth.ts --output ./src/db/auth-schema.ts --yes"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }
