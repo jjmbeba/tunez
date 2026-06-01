@@ -25,6 +25,7 @@ import { RouterLink } from "vue-router";
     <nav class="nav-secondary" aria-label="Secondary">
       <RouterLink to="/genres" class="shell-nav-link">Genres</RouterLink>
       <RouterLink to="/artists" class="shell-nav-link">Artists</RouterLink>
+      <RouterLink to="/profile" class="shell-nav-link">Profile</RouterLink>
     </nav>
   </aside>
 </template>

@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { Play, Pause, VolumeX, Volume1, Volume2, X } from 'lucide-vue-next'
 import { useAudioStore } from '@/stores/audio'
 import { useAudio } from '@/composables/use-audio'
+import { useListeningHistory } from '@/composables/use-listening-history'
 import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
 import FavoriteToggle from '@/features/favorites/components/favorite-toggle.vue'
 
@@ -10,6 +11,7 @@ const audioEl = ref<HTMLAudioElement | null>(null)
 const store = useAudioStore()
 
 useAudio(audioEl)
+useListeningHistory(audioEl)
 
 const prevVolume = ref(store.volume)
 
