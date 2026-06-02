@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { getGenreById } from "@/features/genres";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,15 @@ const router = createRouter({
       path: "/genres",
       name: "genres",
       component: () => import("@/pages/genres/genres-page.vue"),
+    },
+    {
+      path: "/genres/:id",
+      name: "genre-detail",
+      component: () => import("@/pages/genres/genre-detail-page.vue"),
+      beforeEnter: (to) => {
+        const genreId = typeof to.params.id === "string" ? to.params.id : "";
+        return getGenreById(genreId) ? true : { name: "genres" };
+      },
     },
     {
       path: "/favorites",

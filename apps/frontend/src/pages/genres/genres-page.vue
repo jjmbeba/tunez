@@ -1,20 +1,28 @@
 <script setup lang="ts">
+import { useGenres } from "@/composables/use-genres";
 import PageHeader from "@/shared/components/page-header.vue";
+import GenreTile from "@/features/genres/components/GenreTile.vue";
+
+const genres = useGenres();
 </script>
 
 <template>
   <section class="page">
-    <PageHeader title="Genres" />
-    <p class="hint">Browse by genre will appear here.</p>
+    <PageHeader title="Genres" subtitle="Explore music by genre" />
+
+    <div class="genre-grid">
+      <GenreTile v-for="genre in genres" :key="genre.id" :genre="genre" />
+    </div>
   </section>
 </template>
 
 <style scoped lang="scss">
 @use "@/shared/styles/page";
 
-.hint {
-  margin: 0;
-  color: var(--color-muted);
-  font-size: 13px;
+.genre-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  padding-block-start: var(--space-6);
 }
 </style>
