@@ -24,7 +24,11 @@ const genreAliasesById = new Map<GenreId, Set<string>>(
 );
 
 function getStationTokens(station: Pick<Station, "tags" | "name">) {
-  return new Set(station.tags.map(normalizeGenreToken).filter(Boolean));
+  const tagTokens = station.tags.map(normalizeGenreToken).filter(Boolean);
+  const normalizedName = normalizeGenreToken(station.name);
+  const nameTokens = normalizedName ? normalizedName.split(" ").filter(Boolean) : [];
+
+  return new Set(normalizedName ? [...tagTokens, normalizedName, ...nameTokens] : tagTokens);
 }
 
 function stationMatchesGenre(station: Pick<Station, "tags" | "name">, genreId: GenreId) {

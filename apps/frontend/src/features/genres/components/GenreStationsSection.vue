@@ -4,7 +4,8 @@ import StationGrid from "@/features/radio/components/station-grid.vue";
 import type { StationCardStation } from "@/features/radio/station-card.types";
 
 defineProps<{
-  stations: StationCardStation[];
+  // Thin presentation wrapper around StationGrid; keep its stations contract aligned.
+  stations: StationCardStation[] | null | undefined;
   isLoading: boolean;
   isError: boolean;
   error: unknown;
