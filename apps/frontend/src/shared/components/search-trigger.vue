@@ -19,7 +19,7 @@ const searchStore = useSearchStore()
     type="button"
     class="search-trigger"
     :class="{ 'search-trigger--compact': compact }"
-    aria-label="Search"
+    :aria-label="compact ? 'Search music' : undefined"
     @click="searchStore.open"
   >
     <Search stroke-width="1.5" :size="compact ? 20 : 16" />

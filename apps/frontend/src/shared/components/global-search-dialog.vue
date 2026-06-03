@@ -152,7 +152,7 @@ function handlePanelKeydown(event: KeyboardEvent) {
     return
   }
 
-  if (target?.closest('.command-panel__close, .command-tabs__button')) {
+  if (target?.closest('.command-result, .command-panel__close, .command-tabs__button')) {
     return
   }
 
