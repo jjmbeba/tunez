@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { Users } from "lucide-vue-next";
-import { useArtistSimilar } from "@/composables/use-artist";
-import { useRouter } from "vue-router";
-import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
-import { toRef } from "vue";
+import { Users } from 'lucide-vue-next'
+import { useArtistSimilar } from '@/composables/use-artist'
+import { useRouter } from 'vue-router'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
+import { toRef } from 'vue'
 
-const router = useRouter();
+const router = useRouter()
 
 const props = defineProps<{
-  name: string;
-}>();
+  name: string
+}>()
 
-const artistName = toRef(props, "name");
-const { data: similar, isLoading: isSimilarLoading } = useArtistSimilar(artistName);
+const artistName = toRef(props, 'name')
+const { data: similar, isLoading: isSimilarLoading } = useArtistSimilar(artistName)
 
 function goToArtist(artistName: string) {
-  router.push(`/artists/${encodeURIComponent(artistName)}`);
+  router.push(`/artists/${encodeURIComponent(artistName)}`)
 }
 </script>
 
@@ -47,8 +47,8 @@ function goToArtist(artistName: string) {
 </template>
 
 <style scoped lang="scss">
-@use "../styles/section-shared";
-@use "../styles/carousel";
+@use '../styles/section-shared';
+@use '../styles/carousel';
 
 .similar-carousel {
   @include carousel.carousel;

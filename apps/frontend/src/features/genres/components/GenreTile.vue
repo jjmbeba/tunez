@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { GenreDefinition } from "@/features/genres";
-import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
+import type { GenreDefinition } from '@/features/genres'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
 
-defineProps<{ genre: GenreDefinition }>();
+defineProps<{ genre: GenreDefinition }>()
 </script>
 
 <template>

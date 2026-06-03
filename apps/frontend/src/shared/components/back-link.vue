@@ -30,5 +30,5 @@ function go() {
 </template>
 
 <style scoped lang="scss">
-@use "../styles/page";
+@use '../styles/page';
 </style>

@@ -1,8 +1,37 @@
 <script setup lang="ts">
-import AppBottomNav from "./app-bottom-nav.vue";
-import AppHeaderMobile from "./app-header-mobile.vue";
-import AppSidebar from "./app-sidebar.vue";
-import PersistentPlayer from "./persistent-player.vue";
+import { onMounted, onUnmounted } from 'vue'
+import AppBottomNav from './app-bottom-nav.vue'
+import AppHeaderMobile from './app-header-mobile.vue'
+import AppSidebar from './app-sidebar.vue'
+import PersistentPlayer from './persistent-player.vue'
+import GlobalSearchDialog from '@/shared/components/global-search-dialog.vue'
+import ToastContainer from '@/shared/components/toast-container.vue'
+import { useSearchStore } from '@/stores/search'
+
+const searchStore = useSearchStore()
+
+function handleGlobalKeydown(event: KeyboardEvent) {
+  const target = event.target
+  const isEditableTarget =
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    (target instanceof HTMLElement && target.isContentEditable)
+
+  if (isEditableTarget && !searchStore.isOpen) return
+
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    event.preventDefault()
+    searchStore.open()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleGlobalKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown)
+})
 </script>
 
 <template>
@@ -18,6 +47,8 @@ import PersistentPlayer from "./persistent-player.vue";
         <AppBottomNav />
       </div>
     </div>
+    <GlobalSearchDialog />
+    <ToastContainer />
   </div>
 </template>
 

@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useArtist } from "@/composables/use-artist";
-import ArtistAlbums from "@/features/artists/components/artist-albums.vue";
-import ArtistBio from "@/features/artists/components/artist-bio.vue";
-import SimilarArtists from "@/features/artists/components/similar-artists.vue";
-import DetailSheetShell from "@/features/shell/detail-sheet-shell.vue";
-import BackLink from "@/shared/components/back-link.vue";
-import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
-import { Headphones } from "lucide-vue-next";
-import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { useArtist } from '@/composables/use-artist'
+import ArtistAlbums from '@/features/artists/components/artist-albums.vue'
+import ArtistBio from '@/features/artists/components/artist-bio.vue'
+import SimilarArtists from '@/features/artists/components/similar-artists.vue'
+import DetailSheetShell from '@/features/shell/detail-sheet-shell.vue'
+import BackLink from '@/shared/components/back-link.vue'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
+import { Headphones } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-const route = useRoute();
-const name = computed(() => route.params.name as string);
-const { data: artist, isLoading: isArtistLoading, error } = useArtist(name);
+const route = useRoute()
+const name = computed(() => route.params.name as string)
+const { data: artist, isLoading: isArtistLoading, error } = useArtist(name)
 </script>
 
 <template>
@@ -67,9 +67,9 @@ const { data: artist, isLoading: isArtistLoading, error } = useArtist(name);
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
-@use "@/shared/styles/state";
-@use "../../features/artists/styles/section-shared";
+@use '@/shared/styles/page';
+@use '@/shared/styles/state';
+@use '../../features/artists/styles/section-shared';
 
 .state.error {
   color: var(--color-danger);

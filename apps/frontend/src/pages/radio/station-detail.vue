@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { ExternalLink, Globe, Headphones, Play, Radio } from "lucide-vue-next";
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { useStation } from "@/composables/use-station";
-import DetailSheetShell from "@/features/shell/detail-sheet-shell.vue";
-import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
-import BackLink from "@/shared/components/back-link.vue";
-import FavoriteToggle from "@/features/favorites/components/favorite-toggle.vue";
-import { useAudioStore } from "@/stores/audio";
+import { ExternalLink, Globe, Headphones, Play, Radio } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStation } from '@/composables/use-station'
+import DetailSheetShell from '@/features/shell/detail-sheet-shell.vue'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
+import BackLink from '@/shared/components/back-link.vue'
+import FavoriteToggle from '@/features/favorites/components/favorite-toggle.vue'
+import { useAudioStore } from '@/stores/audio'
 
-const route = useRoute();
-const id = computed(() => route.params.id as string);
-const { data: station, isLoading, error } = useStation(id);
-const audioStore = useAudioStore();
+const route = useRoute()
+const id = computed(() => route.params.id as string)
+const { data: station, isLoading, error } = useStation(id)
+const audioStore = useAudioStore()
 </script>
 
 <template>
@@ -59,9 +59,7 @@ const audioStore = useAudioStore();
             <Radio stroke-width="1" :size="12" />
             <span>
               {{ station.codec }}
-              <template v-if="station.bitrate">
-                &middot; {{ station.bitrate }} kbps
-              </template>
+              <template v-if="station.bitrate"> &middot; {{ station.bitrate }} kbps </template>
             </span>
           </span>
           <span v-if="station.language" class="stat">
@@ -97,9 +95,9 @@ const audioStore = useAudioStore();
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
-@use "@/shared/styles/state";
-@use "../../features/radio/styles/detail";
+@use '@/shared/styles/page';
+@use '@/shared/styles/state';
+@use '../../features/radio/styles/detail';
 
 .error {
   color: var(--color-danger);

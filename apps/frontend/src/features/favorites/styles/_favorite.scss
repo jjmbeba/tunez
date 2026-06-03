@@ -9,7 +9,10 @@
   background: none;
   color: var(--minimal-subtle);
   cursor: pointer;
-  transition: color 0.2s, background 0.2s, transform 0.15s ease;
+  transition:
+    color 0.2s,
+    background 0.2s,
+    transform 0.15s ease;
 
   &:hover {
     color: var(--color-danger, #e11d48);

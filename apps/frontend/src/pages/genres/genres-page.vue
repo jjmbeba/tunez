@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useGenres } from "@/composables/use-genres";
-import PageHeader from "@/shared/components/page-header.vue";
-import GenreTile from "@/features/genres/components/GenreTile.vue";
+import { useGenres } from '@/composables/use-genres'
+import PageHeader from '@/shared/components/page-header.vue'
+import GenreTile from '@/features/genres/components/GenreTile.vue'
 
-const genres = useGenres();
+const genres = useGenres()
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const genres = useGenres();
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
+@use '@/shared/styles/page';
 
 .genre-grid {
   display: grid;

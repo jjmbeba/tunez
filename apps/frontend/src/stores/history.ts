@@ -45,10 +45,10 @@ export const useHistoryStore = defineStore('history', () => {
   }
 
   function prepend(entry: ListeningHistory) {
-    recentEntries.value = [entry, ...recentEntries.value.filter((item) => item.id !== entry.id)].slice(
-      0,
-      lastRequestedLimit.value,
-    )
+    recentEntries.value = [
+      entry,
+      ...recentEntries.value.filter((item) => item.id !== entry.id),
+    ].slice(0, lastRequestedLimit.value)
   }
 
   async function saveEntry(entry: HistoryEntryInput) {

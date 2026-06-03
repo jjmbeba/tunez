@@ -36,16 +36,9 @@ function handlePlay() {
 </script>
 
 <template>
-  <div
-    class="station-card"
-    :class="{ 'station-card--active': isCurrent }"
-  >
+  <div class="station-card" :class="{ 'station-card--active': isCurrent }">
     <div class="card-cover">
-      <FallbackArtwork
-        :src="station.favicon"
-        :alt="station.name"
-        :text="station.name"
-      />
+      <FallbackArtwork :src="station.favicon" :alt="station.name" :text="station.name" />
       <FavoriteToggle :station="station" variant="cover" class="card-fav" />
       <button
         type="button"

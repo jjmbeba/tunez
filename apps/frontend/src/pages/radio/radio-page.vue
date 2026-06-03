@@ -63,6 +63,5 @@ const emptyMessage = computed(() =>
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
+@use '@/shared/styles/page';
 </style>
-

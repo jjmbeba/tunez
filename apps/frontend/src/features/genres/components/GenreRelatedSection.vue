@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ArrowRight } from "lucide-vue-next";
-import type { GenreDefinition } from "@/features/genres";
+import { ArrowRight } from 'lucide-vue-next'
+import type { GenreDefinition } from '@/features/genres'
 
-defineProps<{ genres: GenreDefinition[] }>();
+defineProps<{ genres: GenreDefinition[] }>()
 </script>
 
 <template>
@@ -26,7 +26,7 @@ defineProps<{ genres: GenreDefinition[] }>();
 </template>
 
 <style scoped lang="scss">
-@use "../styles/section-shared";
+@use '../styles/section-shared';
 
 .related-list {
   list-style: none;
