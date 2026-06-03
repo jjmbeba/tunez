@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/vue-query'
 import type { ProfileStats } from '@tunes/types'
 import { computed, onMounted } from 'vue'
 import { get } from '@/lib/api'
+import { ensureAnonymousSession } from '@/lib/auth-client'
 import { useHistoryStore } from '@/stores/history'
 
 const RECENT_HISTORY_LIMIT = 10
@@ -12,6 +13,7 @@ export function useProfileDashboard() {
   const statsQuery = useQuery({
     queryKey: ['profile-stats'],
     queryFn: async () => {
+      await ensureAnonymousSession()
       return await get<ProfileStats>('/profile/stats')
     },
   })
