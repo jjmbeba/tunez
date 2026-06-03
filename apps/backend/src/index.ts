@@ -9,6 +9,7 @@ import { artistsRouter } from "./routes/artists.js";
 import { favoritesRouter } from "./routes/favorites.js";
 import { historyRouter } from "./routes/history.js";
 import { lyricsRouter } from "./routes/lyrics.js";
+import { profileRouter } from "./routes/profile.js";
 import { stationsRouter } from "./routes/stations.js";
 
 const app = new Hono<AppBindings>();
@@ -41,6 +42,7 @@ app.route("/api/artists", artistsRouter);
 app.route("/api/lyrics", lyricsRouter);
 app.route("/api/favorites", favoritesRouter);
 app.route("/api/history", historyRouter);
+app.route("/api/profile", profileRouter);
 
 const port = Number(process.env.PORT ?? 3000);
 console.log(`Backend listening on http://localhost:${port}`);
