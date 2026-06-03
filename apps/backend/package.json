@@ -14,7 +14,7 @@
     "valibot": "^1.4.1"
   },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src/dev.ts",
     "build": "tsc -p tsconfig.json",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
