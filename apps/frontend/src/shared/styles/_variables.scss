@@ -6,6 +6,8 @@
   --color-muted: #7f7f7f;
   --color-accent: #292929;
   --color-danger: #c0392b;
+  --color-danger-bg: rgba(192, 57, 43, 0.06);
+  --color-danger-border: rgba(192, 57, 43, 0.18);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -24,8 +26,9 @@
   --radius-xl: 1rem;
   --radius-full: 9999px;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
-    "Segoe UI", "Inter", sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', 'Inter',
+    sans-serif;
 
   /* Minimal — macOS-inspired */
   --minimal-paper: #ffffff;
@@ -34,6 +37,7 @@
   --minimal-subtle: #7f7f7f;
   --minimal-bg-selected: #f5f5f5;
   --minimal-border: #f2f2f2;
-  --font-minimal: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "SF Pro Display", "Segoe UI", "Inter", sans-serif;
+  --font-minimal:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', 'Inter',
+    sans-serif;
 }

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { Radio } from "lucide-vue-next";
-import StationGrid from "@/features/radio/components/station-grid.vue";
-import type { StationCardStation } from "@/features/radio/station-card.types";
+import { Radio } from 'lucide-vue-next'
+import StationGrid from '@/features/radio/components/station-grid.vue'
+import type { StationCardStation } from '@/features/radio/station-card.types'
 
 defineProps<{
   // Thin presentation wrapper around StationGrid; keep its stations contract aligned.
-  stations: StationCardStation[] | null | undefined;
-  isLoading: boolean;
-  isError: boolean;
-  error: unknown;
-}>();
+  stations: StationCardStation[] | null | undefined
+  isLoading: boolean
+  isError: boolean
+  error: unknown
+}>()
 
-const emit = defineEmits<{ select: [id: string] }>();
+const emit = defineEmits<{ select: [id: string] }>()
 </script>
 
 <template>
@@ -35,5 +35,5 @@ const emit = defineEmits<{ select: [id: string] }>();
 </template>
 
 <style scoped lang="scss">
-@use "../styles/section-shared";
+@use '../styles/section-shared';
 </style>

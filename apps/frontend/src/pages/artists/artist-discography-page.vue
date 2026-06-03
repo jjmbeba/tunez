@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { Play } from "lucide-vue-next";
-import { useArtistAlbums } from "@/composables/use-artist";
-import { useRoute } from "vue-router";
-import BackLink from "@/shared/components/back-link.vue";
-import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
-import PageHeader from "@/shared/components/page-header.vue";
+import { Play } from 'lucide-vue-next'
+import { useArtistAlbums } from '@/composables/use-artist'
+import { useRoute } from 'vue-router'
+import BackLink from '@/shared/components/back-link.vue'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
+import PageHeader from '@/shared/components/page-header.vue'
 
-const route = useRoute();
-const name = route.params.name as string;
+const route = useRoute()
+const name = route.params.name as string
 
-const { data: albums, isLoading, error } = useArtistAlbums(name);
+const { data: albums, isLoading, error } = useArtistAlbums(name)
 </script>
 
 <template>
@@ -30,12 +30,7 @@ const { data: albums, isLoading, error } = useArtistAlbums(name);
 
     <template v-else-if="albums?.length">
       <div class="album-grid">
-        <div
-          v-for="album in albums"
-          :key="album.id"
-          class="album-card"
-          tabindex="0"
-        >
+        <div v-for="album in albums" :key="album.id" class="album-card" tabindex="0">
           <div class="album-cover">
             <FallbackArtwork :src="album.image" :alt="album.title" :text="album.title" />
             <div class="album-play">
@@ -52,9 +47,9 @@ const { data: albums, isLoading, error } = useArtistAlbums(name);
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
-@use "@/shared/styles/state";
-@use "../../features/artists/styles/album-card";
+@use '@/shared/styles/page';
+@use '@/shared/styles/state';
+@use '../../features/artists/styles/album-card';
 
 .state.error {
   color: var(--color-danger);

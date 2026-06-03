@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { MusicIcon } from "lucide-vue-next";
-import { RouterLink } from "vue-router";
+import { MusicIcon } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
+import SearchTrigger from '@/shared/components/search-trigger.vue'
 </script>
 
 <template>
@@ -10,9 +11,7 @@ import { RouterLink } from "vue-router";
       <MusicIcon />
     </RouterLink>
 
-    <div class="search-placeholder" aria-hidden="true">
-      <span class="search-placeholder-text">Search (Phase)</span>
-    </div>
+    <SearchTrigger />
 
     <nav class="nav-primary" aria-label="Primary">
       <RouterLink to="/" class="shell-nav-link">Home</RouterLink>
@@ -31,7 +30,7 @@ import { RouterLink } from "vue-router";
 </template>
 
 <style scoped lang="scss">
-@use "./nav";
+@use './nav';
 
 .sidebar {
   display: none;
@@ -48,18 +47,6 @@ import { RouterLink } from "vue-router";
   .sidebar {
     display: flex;
   }
-}
-
-.search-placeholder {
-  padding: 0.5rem 0.875rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--minimal-border);
-  background: var(--color-surface);
-}
-
-.search-placeholder-text {
-  font-size: 0.8125rem;
-  color: var(--minimal-subtle);
 }
 
 .nav-primary,

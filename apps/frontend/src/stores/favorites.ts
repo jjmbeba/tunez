@@ -47,7 +47,9 @@ export const useFavoritesStore = defineStore('favorites', () => {
   const pendingStationIds = ref(new Set<string>())
   let loadPromise: Promise<void> | null = null
 
-  const favorites = computed<FavoriteListItem[]>(() => favoriteEntries.value.map(toFavoriteListItem))
+  const favorites = computed<FavoriteListItem[]>(() =>
+    favoriteEntries.value.map(toFavoriteListItem),
+  )
   const favoriteStationIds = computed(() => new Set(favoriteEntries.value.map((f) => f.stationId)))
 
   function isFavorited(stationId: string): boolean {

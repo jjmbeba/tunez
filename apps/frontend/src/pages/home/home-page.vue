@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { useHomeFeed } from "@/features/home/composables/use-home-feed";
-import StationRail from "@/features/home/components/station-rail.vue";
-import PageHeader from "@/shared/components/page-header.vue";
+import { useRouter } from 'vue-router'
+import { useHomeFeed } from '@/features/home/composables/use-home-feed'
+import StationRail from '@/features/home/components/station-rail.vue'
+import PageHeader from '@/shared/components/page-header.vue'
 
-const router = useRouter();
+const router = useRouter()
 const {
   trendingStations,
   isTrendingLoading,
@@ -14,10 +14,10 @@ const {
   showRecentStations,
   favoriteStations,
   showFavoriteStations,
-} = useHomeFeed();
+} = useHomeFeed()
 
 function goToStation(id: string) {
-  router.push(`/radio/${encodeURIComponent(id)}`);
+  router.push(`/radio/${encodeURIComponent(id)}`)
 }
 </script>
 
@@ -54,7 +54,7 @@ function goToStation(id: string) {
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
+@use '@/shared/styles/page';
 
 .home-feed {
   display: grid;

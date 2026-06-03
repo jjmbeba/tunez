@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { WifiOff } from "lucide-vue-next";
-import StationCard from "@/features/radio/components/station-card.vue";
-import type { StationCardStation } from "@/features/radio/station-card.types";
+import { WifiOff } from 'lucide-vue-next'
+import StationCard from '@/features/radio/components/station-card.vue'
+import type { StationCardStation } from '@/features/radio/station-card.types'
 
 defineProps<{
-  title: string;
-  stations?: StationCardStation[] | null;
-  isLoading?: boolean;
-  isError?: boolean;
-  error?: unknown;
-  skeletonCount?: number;
-}>();
+  title: string
+  stations?: StationCardStation[] | null
+  isLoading?: boolean
+  isError?: boolean
+  error?: unknown
+  skeletonCount?: number
+}>()
 
 const emit = defineEmits<{
-  select: [id: string];
-}>();
+  select: [id: string]
+}>()
 </script>
 
 <template>
@@ -42,7 +42,7 @@ const emit = defineEmits<{
         {{
           error instanceof Error && error.message
             ? `Please try again. ${error.message}`
-            : "Please try again in a moment."
+            : 'Please try again in a moment.'
         }}
       </p>
     </div>
@@ -56,7 +56,7 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/state";
+@use '@/shared/styles/state';
 
 .station-rail {
   display: grid;

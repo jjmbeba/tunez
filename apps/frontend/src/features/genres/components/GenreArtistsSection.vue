@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Users } from "lucide-vue-next";
-import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
+import { Users } from 'lucide-vue-next'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
 
-defineProps<{ artists: string[] }>();
+defineProps<{ artists: string[] }>()
 
-const emit = defineEmits<{ select: [name: string] }>();
+const emit = defineEmits<{ select: [name: string] }>()
 </script>
 
 <template>
@@ -34,8 +34,8 @@ const emit = defineEmits<{ select: [name: string] }>();
 </template>
 
 <style scoped lang="scss">
-@use "../styles/section-shared";
-@use "@/features/artists/styles/carousel";
+@use '../styles/section-shared';
+@use '@/features/artists/styles/carousel';
 
 .artists-carousel {
   @include carousel.carousel;

@@ -60,8 +60,8 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
-@use "@/shared/styles/state";
+@use '@/shared/styles/page';
+@use '@/shared/styles/state';
 
 .grid {
   display: grid;

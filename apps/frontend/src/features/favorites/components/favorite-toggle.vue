@@ -32,14 +32,10 @@ async function handleToggle() {
     :disabled="isPending"
     @click.stop="handleToggle"
   >
-    <Heart
-      stroke-width="1.5"
-      :size="iconSize"
-      :fill="isFavorited ? 'currentColor' : 'none'"
-    />
+    <Heart stroke-width="1.5" :size="iconSize" :fill="isFavorited ? 'currentColor' : 'none'" />
   </button>
 </template>
 
 <style scoped lang="scss">
-@use "../styles/favorite";
+@use '../styles/favorite';
 </style>

@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { Search } from "lucide-vue-next";
-import { useArtistSearch } from "@/composables/use-artist";
-import PageHeader from "@/shared/components/page-header.vue";
-import FallbackArtwork from "@/shared/components/fallback-artwork.vue";
+import { useRouter } from 'vue-router'
+import { Search } from 'lucide-vue-next'
+import { useArtistSearch } from '@/composables/use-artist'
+import PageHeader from '@/shared/components/page-header.vue'
+import FallbackArtwork from '@/shared/components/fallback-artwork.vue'
 
-const router = useRouter();
-const { query, debouncedQuery, showResults, data: results, isLoading, isError, error } =
-  useArtistSearch();
+const router = useRouter()
+const {
+  query,
+  debouncedQuery,
+  showResults,
+  data: results,
+  isLoading,
+  isError,
+  error,
+} = useArtistSearch()
 
 function goToArtist(name: string) {
-  router.push(`/artists/${encodeURIComponent(name)}`);
+  router.push(`/artists/${encodeURIComponent(name)}`)
 }
-
 </script>
 
 <template>
@@ -42,7 +48,7 @@ function goToArtist(name: string) {
     </div>
 
     <div v-else-if="isError" class="state state-error">
-      {{ error instanceof Error ? error.message : "Something went wrong" }}
+      {{ error instanceof Error ? error.message : 'Something went wrong' }}
     </div>
 
     <div v-else-if="results?.length === 0" class="state">
@@ -58,7 +64,7 @@ function goToArtist(name: string) {
         @click="goToArtist(a.name)"
       >
         <div class="result-avatar">
-            <FallbackArtwork :src="a.image" :alt="a.name" :text="a.name" />
+          <FallbackArtwork :src="a.image" :alt="a.name" :text="a.name" />
         </div>
         <span class="result-name">{{ a.name }}</span>
       </button>
@@ -67,8 +73,8 @@ function goToArtist(name: string) {
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/page";
-@use "@/shared/styles/state";
+@use '@/shared/styles/page';
+@use '@/shared/styles/state';
 
 .search-field {
   position: relative;

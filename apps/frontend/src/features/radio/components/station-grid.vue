@@ -31,7 +31,7 @@ const emit = defineEmits<{
     <WifiOff stroke-width="1" :size="24" />
     <p class="state-title">Couldn't load stations</p>
     <p class="state-desc">
-      {{ error instanceof Error ? error.message : "Something went wrong" }}
+      {{ error instanceof Error ? error.message : 'Something went wrong' }}
     </p>
   </div>
 
@@ -42,11 +42,16 @@ const emit = defineEmits<{
   </div>
 
   <div v-else class="grid">
-    <StationCard v-for="s in stations" :key="s.id" :station="s" @select="(id) => emit('select', id)" />
+    <StationCard
+      v-for="s in stations"
+      :key="s.id"
+      :station="s"
+      @select="(id) => emit('select', id)"
+    />
   </div>
 </template>
 
 <style scoped lang="scss">
-@use "@/shared/styles/state";
-@use "../styles/grid";
+@use '@/shared/styles/state';
+@use '../styles/grid';
 </style>

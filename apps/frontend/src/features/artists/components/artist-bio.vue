@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
-  bio: string;
-}>();
+  bio: string
+}>()
 
-const expanded = ref(false);
-const showToggle = computed(() => props.bio.length > 280);
+const expanded = ref(false)
+const showToggle = computed(() => props.bio.length > 280)
 </script>
 
 <template>
   <div v-if="bio" class="bio-block">
     <p class="bio" :class="{ clamped: !expanded && showToggle }">{{ bio }}</p>
     <button v-if="showToggle" type="button" class="bio-toggle" @click="expanded = !expanded">
-      {{ expanded ? "Show less" : "Read more" }}
+      {{ expanded ? 'Show less' : 'Read more' }}
     </button>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
-import { Heart, Home, Radio, Users } from "lucide-vue-next";
+import { RouterLink } from 'vue-router'
+import { Heart, Home, Radio, Users } from 'lucide-vue-next'
 </script>
 
 <template>

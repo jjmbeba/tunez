@@ -1,21 +1,14 @@
 <script setup lang="ts">
-import { RouterLink, useRouter } from "vue-router";
-import { Search, User } from "lucide-vue-next";
-
-const router = useRouter();
-
-function goToArtistSearch() {
-  router.push("/artists");
-}
+import { RouterLink } from 'vue-router'
+import { User } from 'lucide-vue-next'
+import SearchTrigger from '@/shared/components/search-trigger.vue'
 </script>
 
 <template>
   <header class="mobile-header">
     <RouterLink to="/" class="shell-wordmark">Tunez</RouterLink>
     <div class="mobile-header-actions">
-      <button type="button" class="icon-btn" aria-label="Search" @click="goToArtistSearch">
-        <Search stroke-width="1.5" :size="20" />
-      </button>
+      <SearchTrigger compact />
       <RouterLink to="/profile" class="icon-btn" aria-label="Profile">
         <User stroke-width="1.5" :size="20" />
       </RouterLink>
@@ -24,7 +17,7 @@ function goToArtistSearch() {
 </template>
 
 <style scoped lang="scss">
-@use "./nav";
+@use './nav';
 
 .mobile-header {
   display: flex;
@@ -60,7 +53,9 @@ function goToArtistSearch() {
   color: var(--minimal-muted);
   cursor: pointer;
   text-decoration: none;
-  transition: color 0.2s, background 0.2s;
+  transition:
+    color 0.2s,
+    background 0.2s;
 
   &:hover {
     color: var(--minimal-ink);

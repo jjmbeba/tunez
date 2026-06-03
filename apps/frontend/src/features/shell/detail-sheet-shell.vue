@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
-  fallbackRoute: string;
-}>();
+  fallbackRoute: string
+}>()
 
-const router = useRouter();
+const router = useRouter()
 
 function dismiss() {
   if (window.history.length > 1) {
-    router.back();
-    return;
+    router.back()
+    return
   }
 
-  router.push(props.fallbackRoute);
+  router.push(props.fallbackRoute)
 }
 </script>
 
