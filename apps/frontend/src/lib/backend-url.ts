@@ -1,12 +1,17 @@
-const DEFAULT_BACKEND_URL = 'http://localhost:3000'
-const configuredBackendUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '')
+const DEFAULT_DEV_BACKEND_URL = 'http://localhost:3000'
+const configuredDevBackendUrl = import.meta.env.DEV
+  ? import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '')
+  : undefined
 
-export const BACKEND_URL =
-  configuredBackendUrl ??
-  (import.meta.env.PROD && typeof window !== 'undefined' ? window.location.origin : DEFAULT_BACKEND_URL)
+export const DEV_BACKEND_URL = configuredDevBackendUrl ?? DEFAULT_DEV_BACKEND_URL
+export const AUTH_BASE_URL = import.meta.env.DEV ? DEV_BACKEND_URL : undefined
 
 export function buildBackendUrl(path: string): string {
-  const normalizedPath = path.replace(/^\/+/, '')
+  const normalizedPath = `/${path.replace(/^\/+/, '')}`
 
-  return new URL(normalizedPath, `${BACKEND_URL}/`).href
+  if (import.meta.env.PROD) {
+    return normalizedPath
+  }
+
+  return new URL(normalizedPath, `${DEV_BACKEND_URL}/`).href
 }

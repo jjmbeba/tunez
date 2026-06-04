@@ -35,6 +35,11 @@ pnpm install
 pnpm dev
 ```
 
+By default, local development calls the backend at `http://localhost:3000`.
+Set `VITE_API_BASE_URL` locally if you need a different backend URL.
+
+Do not set `VITE_API_BASE_URL` in Vercel production. Production frontend builds call same-origin `/api/*` routes, and `vercel.json` rewrites those requests to the backend project so Better Auth cookies remain first-party. If the backend Vercel domain changes, update `vercel.json` and redeploy the frontend.
+
 ### Type-Check, Compile and Minify for Production
 
 ```sh

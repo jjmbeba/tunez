@@ -1,9 +1,9 @@
-import { BACKEND_URL } from '@/lib/backend-url'
+import { AUTH_BASE_URL } from '@/lib/backend-url'
 import { anonymousClient } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/vue'
 
 export const authClient = createAuthClient({
-  baseURL: BACKEND_URL,
+  ...(AUTH_BASE_URL ? { baseURL: AUTH_BASE_URL } : {}),
   plugins: [anonymousClient()],
 })
 
