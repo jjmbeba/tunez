@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Play } from 'lucide-vue-next'
 import { useArtistAlbums } from '@/composables/use-artist'
 import { useRoute } from 'vue-router'
 import BackLink from '@/shared/components/back-link.vue'
@@ -33,9 +32,6 @@ const { data: albums, isLoading, error } = useArtistAlbums(name)
         <div v-for="album in albums" :key="album.id" class="album-card" tabindex="0">
           <div class="album-cover">
             <FallbackArtwork :src="album.image" :alt="album.title" :text="album.title" />
-            <div class="album-play">
-              <Play stroke-width="1" :size="18" />
-            </div>
           </div>
           <p class="album-title">{{ album.title }}</p>
         </div>
