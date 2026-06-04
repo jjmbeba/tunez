@@ -24,40 +24,40 @@ router.get('/stats', async (c) => {
   const stationListenCountExpr = sql<number>`count(*)`
   const stationTotalSecondsExpr = sql<number>`coalesce(sum(${listeningHistory.duration}), 0)`
 
-  const [favoriteStats] = await db
-    .select({ favoriteCount: favoriteCountExpr })
-    .from(favorite)
-    .where(eq(favorite.userId, user.id))
-
-  const [historyStats] = await db
-    .select({
-      totalListens: totalListensExpr,
-      totalListeningSeconds: totalListeningSecondsExpr,
-    })
-    .from(listeningHistory)
-    .where(eq(listeningHistory.userId, user.id))
-
-  const topStationRows = await db
-    .select({
-      stationId: listeningHistory.stationId,
-      stationName: listeningHistory.stationName,
-      stationFavicon: listeningHistory.stationFavicon,
-      listenCount: stationListenCountExpr,
-      totalListeningSeconds: stationTotalSecondsExpr,
-    })
-    .from(listeningHistory)
-    .where(eq(listeningHistory.userId, user.id))
-    .groupBy(
-      listeningHistory.stationId,
-      listeningHistory.stationName,
-      listeningHistory.stationFavicon,
-    )
-    .orderBy(
-      desc(stationListenCountExpr),
-      desc(stationTotalSecondsExpr),
-      asc(listeningHistory.stationName),
-    )
-    .limit(3)
+  const [[favoriteStats], [historyStats], topStationRows] = await Promise.all([
+    db
+      .select({ favoriteCount: favoriteCountExpr })
+      .from(favorite)
+      .where(eq(favorite.userId, user.id)),
+    db
+      .select({
+        totalListens: totalListensExpr,
+        totalListeningSeconds: totalListeningSecondsExpr,
+      })
+      .from(listeningHistory)
+      .where(eq(listeningHistory.userId, user.id)),
+    db
+      .select({
+        stationId: listeningHistory.stationId,
+        stationName: listeningHistory.stationName,
+        stationFavicon: listeningHistory.stationFavicon,
+        listenCount: stationListenCountExpr,
+        totalListeningSeconds: stationTotalSecondsExpr,
+      })
+      .from(listeningHistory)
+      .where(eq(listeningHistory.userId, user.id))
+      .groupBy(
+        listeningHistory.stationId,
+        listeningHistory.stationName,
+        listeningHistory.stationFavicon,
+      )
+      .orderBy(
+        desc(stationListenCountExpr),
+        desc(stationTotalSecondsExpr),
+        asc(listeningHistory.stationName),
+      )
+      .limit(3),
+  ])
 
   const payload: ProfileStats = {
     favoriteCount: toNumber(favoriteStats?.favoriteCount),
