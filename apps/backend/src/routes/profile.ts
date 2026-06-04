@@ -1,5 +1,5 @@
 import type { ProfileStats } from '@tunes/types'
-import { asc, desc, eq, sql } from 'drizzle-orm'
+import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { favorite, listeningHistory } from '../db/schema.js'
 import { db } from '../db/index.js'
@@ -39,37 +39,68 @@ router.get('/stats', async (c) => {
     db
       .select({
         stationId: listeningHistory.stationId,
-        stationName: listeningHistory.stationName,
-        stationFavicon: listeningHistory.stationFavicon,
         listenCount: stationListenCountExpr,
         totalListeningSeconds: stationTotalSecondsExpr,
       })
       .from(listeningHistory)
       .where(eq(listeningHistory.userId, user.id))
-      .groupBy(
-        listeningHistory.stationId,
-        listeningHistory.stationName,
-        listeningHistory.stationFavicon,
-      )
+      .groupBy(listeningHistory.stationId)
       .orderBy(
         desc(stationListenCountExpr),
         desc(stationTotalSecondsExpr),
-        asc(listeningHistory.stationName),
+        asc(listeningHistory.stationId),
       )
       .limit(3),
   ])
+
+  const topStationIds = topStationRows.map((row) => row.stationId)
+  const latestMetadataRows =
+    topStationIds.length === 0
+      ? []
+      : await db
+          .select({
+            stationId: listeningHistory.stationId,
+            stationName: listeningHistory.stationName,
+            stationFavicon: listeningHistory.stationFavicon,
+          })
+          .from(listeningHistory)
+          .where(
+            and(
+              eq(listeningHistory.userId, user.id),
+              inArray(listeningHistory.stationId, topStationIds),
+            ),
+          )
+          .orderBy(desc(listeningHistory.listenedAt), desc(listeningHistory.id))
+
+  const latestMetadataByStation = new Map<
+    string,
+    { stationName: string; stationFavicon: string | null }
+  >()
+
+  for (const row of latestMetadataRows) {
+    if (!latestMetadataByStation.has(row.stationId)) {
+      latestMetadataByStation.set(row.stationId, {
+        stationName: row.stationName,
+        stationFavicon: row.stationFavicon,
+      })
+    }
+  }
 
   const payload: ProfileStats = {
     favoriteCount: toNumber(favoriteStats?.favoriteCount),
     totalListens: toNumber(historyStats?.totalListens),
     totalListeningSeconds: toNumber(historyStats?.totalListeningSeconds),
-    topStations: topStationRows.map((row) => ({
-      stationId: row.stationId,
-      stationName: row.stationName,
-      stationFavicon: row.stationFavicon,
-      listenCount: toNumber(row.listenCount),
-      totalListeningSeconds: toNumber(row.totalListeningSeconds),
-    })),
+    topStations: topStationRows.map((row) => {
+      const metadata = latestMetadataByStation.get(row.stationId)
+
+      return {
+        stationId: row.stationId,
+        stationName: metadata?.stationName ?? row.stationId,
+        stationFavicon: metadata?.stationFavicon ?? null,
+        listenCount: toNumber(row.listenCount),
+        totalListeningSeconds: toNumber(row.totalListeningSeconds),
+      }
+    }),
   }
 
   return c.json(ok(payload))
