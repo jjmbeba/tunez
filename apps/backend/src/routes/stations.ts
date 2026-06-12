@@ -4,6 +4,7 @@ import { TtlCache } from "../lib/cache.js";
 import * as radioBrowser from "../lib/radio-browser.js";
 import type { RadioBrowserStation } from "../lib/radio-browser.types.js";
 import { ok, fail } from "../lib/response.js";
+import { CURATED_STATIONS } from "../data/curated-stations.js";
 
 const router = new Hono();
 const cache = new TtlCache(60 * 60 * 1000);
@@ -30,45 +31,72 @@ function toStation(raw: RadioBrowserStation): Station {
   };
 }
 
+function dedupeByName(stations: Station[]): Station[] {
+  const seen = new Set<string>();
+
+  return stations.filter((s) => {
+    const key = s.name.toLowerCase().replace(/\s+/g, " ").trim();
+
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 router.get("/", async (c) => {
+  let radioBrowserStations: Station[] = [];
+
   try {
-    const stations = await cache.fetch("stations:ke", () =>
+    radioBrowserStations = await cache.fetch("stations:ke", () =>
       radioBrowser.getStationsByCountry("KE").then((raw) => raw.map(toStation)),
     );
-
-    return c.json(ok(stations));
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-
-    return c.json(fail(message), 502);
+  } catch {
+    // Radio Browser unavailable — serve curated stations only
   }
+
+  const merged = dedupeByName([...CURATED_STATIONS, ...radioBrowserStations]);
+
+  return c.json(ok(merged));
 });
 
 router.get("/search", async (c) => {
-  try {
-    const query = c.req.query("q");
+  const query = c.req.query("q")?.trim();
 
-    if (!query || query.length < 2) {
-      return c.json(ok([]));
-    }
-
-    const raw = await radioBrowser.searchStations(query, "KE");
-    const stations = raw.map(toStation);
-
-    return c.json(ok(stations));
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-
-    return c.json(fail(message), 502);
+  if (!query || query.length < 2) {
+    return c.json(ok([]));
   }
+
+  const lowerQuery = query.toLowerCase();
+
+  const curatedHits = CURATED_STATIONS.filter((s) =>
+    s.name.toLowerCase().includes(lowerQuery),
+  );
+
+  let radioBrowserHits: Station[] = [];
+
+  try {
+    const raw = await radioBrowser.searchStations(query, "KE");
+    radioBrowserHits = raw.map(toStation);
+  } catch {
+    // Radio Browser unavailable — serve curated results only
+  }
+
+  return c.json(ok(dedupeByName([...curatedHits, ...radioBrowserHits])));
 });
 
 router.get("/:id", async (c) => {
+  const id = c.req.param("id");
+  const curated = CURATED_STATIONS.find((s) => s.id === id);
+
+  if (curated) {
+    return c.json(ok(curated));
+  }
+
   try {
-    const id = c.req.param("id");
     const station = await cache.fetch(`station:${id}`, async () => {
       const raw = await radioBrowser.getStationById(id);
       if (!raw) throw new Error("Station not found");
+
       return toStation(raw);
     });
 

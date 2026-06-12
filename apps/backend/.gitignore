@@ -16,7 +16,6 @@ node_modules/
 .env.production
 
 # local database
-data/
 *.db
 *.db-*
 *.sqlite

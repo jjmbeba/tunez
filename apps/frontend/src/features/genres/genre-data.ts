@@ -38,7 +38,7 @@ export const GENRE_DEFINITIONS: GenreDefinition[] = [
     accentColorSoft: '#F1CB5F',
     featuredArtists: ['Sauti Sol', 'Nyashinski', 'Bien', 'Nameless'],
     relatedGenreIds: ['bongo-flava', 'benga'],
-    tagAliases: ['afro pop', 'afropop', 'afrobeats', 'afrobeat', 'pop', 'kenyan pop'],
+    tagAliases: ['afro pop', 'afropop', 'afrobeats', 'afrobeat', 'pop', 'kenyan pop', 'rnb'],
   },
   {
     id: 'genge',
@@ -65,6 +65,19 @@ export const GENRE_DEFINITIONS: GenreDefinition[] = [
     featuredArtists: ['Culture Musical Club', 'Malika', 'Siti binti Saad', 'Zein L Abdin'],
     relatedGenreIds: ['benga', 'bongo-flava'],
     tagAliases: ['taarab', 'swahili', 'coastal', 'mijikenda'],
+  },
+  {
+    id: 'gospel',
+    name: 'Gospel',
+    description: 'Kenyan Christian music — praise across languages.',
+    heroCopy:
+      'Gospel fills Kenyan airwaves with praise, worship, and inspirational messages that cross denominational and linguistic boundaries.',
+    heroLabels: ['Praise', 'Worship', 'Inspiration'],
+    accentColor: '#6A1B9A',
+    accentColorSoft: '#CE93D8',
+    featuredArtists: ['Mercy Masika', 'Evelyn Wanjiku', 'Gloria Muliro', 'Bahati'],
+    relatedGenreIds: ['afro-pop'],
+    tagAliases: ['gospel', 'christian', 'worship', 'praise', 'inspirational'],
   },
   {
     id: 'bongo-flava',
