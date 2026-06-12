@@ -4,6 +4,7 @@ import { TtlCache } from "../lib/cache.js";
 import * as radioBrowser from "../lib/radio-browser.js";
 import type { RadioBrowserStation } from "../lib/radio-browser.types.js";
 import { ok, fail } from "../lib/response.js";
+import { CURATED_STATIONS } from "../data/curated-stations.js";
 
 const router = new Hono();
 const cache = new TtlCache(60 * 60 * 1000);
@@ -30,18 +31,37 @@ function toStation(raw: RadioBrowserStation): Station {
   };
 }
 
+function normalizeStationName(name: string): string {
+  return name.toLowerCase().trim();
+}
+
+function dedupeByName(stations: Station[]): Station[] {
+  const seen = new Set<string>();
+
+  return stations.filter((s) => {
+    const key = normalizeStationName(s.name);
+
+    if (seen.has(key)) return false;
+    
+    seen.add(key);
+    return true;
+  });
+}
+
 router.get("/", async (c) => {
+  let radioBrowserStations: Station[] = [];
+
   try {
-    const stations = await cache.fetch("stations:ke", () =>
+    radioBrowserStations = await cache.fetch("stations:ke", () =>
       radioBrowser.getStationsByCountry("KE").then((raw) => raw.map(toStation)),
     );
-
-    return c.json(ok(stations));
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-
-    return c.json(fail(message), 502);
+  } catch {
+    // Radio Browser unavailable — serve curated stations only
   }
+
+  const merged = dedupeByName([...CURATED_STATIONS, ...radioBrowserStations]);
+
+  return c.json(ok(merged));
 });
 
 router.get("/search", async (c) => {
@@ -52,10 +72,18 @@ router.get("/search", async (c) => {
       return c.json(ok([]));
     }
 
-    const raw = await radioBrowser.searchStations(query, "KE");
-    const stations = raw.map(toStation);
+    const lowerQuery = query.toLowerCase();
 
-    return c.json(ok(stations));
+    const curatedHits = CURATED_STATIONS.filter((s) =>
+      s.name.toLowerCase().includes(lowerQuery),
+    );
+
+    const raw = await radioBrowser.searchStations(query, "KE");
+    const radioBrowserHits = raw.map(toStation);
+
+    const merged = dedupeByName([...curatedHits, ...radioBrowserHits]);
+
+    return c.json(ok(merged));
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
 
@@ -64,11 +92,18 @@ router.get("/search", async (c) => {
 });
 
 router.get("/:id", async (c) => {
+  const id = c.req.param("id");
+  const curated = CURATED_STATIONS.find((s) => s.id === id);
+
+  if (curated) {
+    return c.json(ok(curated));
+  }
+
   try {
-    const id = c.req.param("id");
     const station = await cache.fetch(`station:${id}`, async () => {
       const raw = await radioBrowser.getStationById(id);
       if (!raw) throw new Error("Station not found");
+
       return toStation(raw);
     });
 
