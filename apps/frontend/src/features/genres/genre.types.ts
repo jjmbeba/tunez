@@ -1,4 +1,4 @@
-export type GenreId = 'benga' | 'gengetone' | 'afro-pop' | 'genge' | 'taarab' | 'bongo-flava'
+export type GenreId = 'benga' | 'gengetone' | 'afro-pop' | 'genge' | 'taarab' | 'bongo-flava' | 'gospel'
 
 export interface GenreDefinition {
   id: GenreId
