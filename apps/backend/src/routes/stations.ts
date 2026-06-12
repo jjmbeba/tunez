@@ -35,7 +35,7 @@ function dedupeByName(stations: Station[]): Station[] {
   const seen = new Set<string>();
 
   return stations.filter((s) => {
-    const key = s.name.toLowerCase().trim();
+    const key = s.name.toLowerCase().replace(/\s+/g, " ").trim();
 
     if (seen.has(key)) return false;
     seen.add(key);
@@ -60,7 +60,7 @@ router.get("/", async (c) => {
 });
 
 router.get("/search", async (c) => {
-  const query = c.req.query("q");
+  const query = c.req.query("q")?.trim();
 
   if (!query || query.length < 2) {
     return c.json(ok([]));
