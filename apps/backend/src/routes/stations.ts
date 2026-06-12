@@ -31,18 +31,13 @@ function toStation(raw: RadioBrowserStation): Station {
   };
 }
 
-function normalizeStationName(name: string): string {
-  return name.toLowerCase().trim();
-}
-
 function dedupeByName(stations: Station[]): Station[] {
   const seen = new Set<string>();
 
   return stations.filter((s) => {
-    const key = normalizeStationName(s.name);
+    const key = s.name.toLowerCase().trim();
 
     if (seen.has(key)) return false;
-    
     seen.add(key);
     return true;
   });
@@ -65,30 +60,28 @@ router.get("/", async (c) => {
 });
 
 router.get("/search", async (c) => {
-  try {
-    const query = c.req.query("q");
+  const query = c.req.query("q");
 
-    if (!query || query.length < 2) {
-      return c.json(ok([]));
-    }
-
-    const lowerQuery = query.toLowerCase();
-
-    const curatedHits = CURATED_STATIONS.filter((s) =>
-      s.name.toLowerCase().includes(lowerQuery),
-    );
-
-    const raw = await radioBrowser.searchStations(query, "KE");
-    const radioBrowserHits = raw.map(toStation);
-
-    const merged = dedupeByName([...curatedHits, ...radioBrowserHits]);
-
-    return c.json(ok(merged));
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-
-    return c.json(fail(message), 502);
+  if (!query || query.length < 2) {
+    return c.json(ok([]));
   }
+
+  const lowerQuery = query.toLowerCase();
+
+  const curatedHits = CURATED_STATIONS.filter((s) =>
+    s.name.toLowerCase().includes(lowerQuery),
+  );
+
+  let radioBrowserHits: Station[] = [];
+
+  try {
+    const raw = await radioBrowser.searchStations(query, "KE");
+    radioBrowserHits = raw.map(toStation);
+  } catch {
+    // Radio Browser unavailable — serve curated results only
+  }
+
+  return c.json(ok(dedupeByName([...curatedHits, ...radioBrowserHits])));
 });
 
 router.get("/:id", async (c) => {
